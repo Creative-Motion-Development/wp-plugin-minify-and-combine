@@ -383,10 +383,10 @@ abstract class WMAC_PluginBase
         // Some things are differently handled for css/js...
         $is_js_file = ( '.js' === substr( $filepath, -3, 3 ) );
 
-        /*$is_css_file = false;
+        $is_css_file = false;
         if ( ! $is_js_file ) {
             $is_css_file = ( '.css' === substr( $filepath, -4, 4 ) );
-        }*/
+        }
 
         // BOMs being nuked here unconditionally (regardless of where they are)!
         $filecontent = preg_replace( "#\x{EF}\x{BB}\x{BF}#", '', $filecontent );
@@ -415,8 +415,8 @@ abstract class WMAC_PluginBase
                 // It should, wrap in try/catch.
                 $filecontent = 'try{' . $filecontent . '}catch(e){}';
             }
-        /*} elseif ( $is_css_file ) {
-            $filecontent = WMAC_PluginStyles::fixurls( $filepath, $filecontent );*/
+        } elseif ( $is_css_file ) {
+            $filecontent = WMAC_PluginStyles::fixurls( $filepath, $filecontent );
         } else {
             $filecontent = '';
         }
