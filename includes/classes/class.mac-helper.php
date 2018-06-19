@@ -322,4 +322,19 @@ class WMAC_PluginHelper
 
         return preg_replace( $patterns, $replacements, $path );
     }
+
+	/**
+	 * @param $bytes
+	 * @param int $decimals
+	 *
+	 * @return string
+	 */
+	public static function format_filesize( $bytes, $decimals = 2 )
+	{
+		$units = array( 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB' );
+
+		for ( $i = 0; ( $bytes / 1024) > 0.9; $i++, $bytes /= 1024 ) {} // @codingStandardsIgnoreLine
+
+		return sprintf( "%1.{$decimals}f %s", round( $bytes, $decimals ), $units[ $i ] );
+	}
 }

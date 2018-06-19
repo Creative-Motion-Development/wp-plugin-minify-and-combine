@@ -434,6 +434,37 @@ class WMAC_PluginCache
         return $stats;
     }
 
+	/**
+	 * Return cache used data
+	 *
+	 * @return array
+	 */
+	public static function getUsedCache(  ) {
+		// Retrieve the Autoptimize Cache Stats information.
+		$stats = WMAC_PluginCache::stats();
+
+		// Set the Max Size recommended for cache files.
+		$max_size = apply_filters( 'wmac_filter_cachecheck_maxsize', 512 * 1024 * 1024 );
+
+		// Retrieve the current Total Files in cache.
+		$files = $stats[0];
+		// Retrieve the current Total Size of the cache.
+		$bytes = $stats[1];
+		$size  = WMAC_PluginHelper::format_filesize( $bytes );
+
+		// Calculate the percentage of cache used.
+		$percent = ceil( $bytes / $max_size * 100 );
+		if ( $percent > 100 ) {
+			$percent = 100;
+		}
+
+		return array(
+			'files'   => $files,
+			'size'    => $size,
+			'percent' => $percent,
+		);
+    }
+
     /**
      * Performs a scan of cache directory contents and returns an array
      * with 3 values: count, size, timestamp.

@@ -47,6 +47,8 @@
 			}
 
 			parent::__construct($plugin);
+
+			add_action( 'admin_bar_menu', array( $this, 'addAdminBarMenu' ), 999 );
 		}
 
 		// Метод позволяет менять заголовок меню, в зависимости от сборки плагина.
@@ -340,6 +342,7 @@ This can be fully automated for different types of pages with the Мinify And Co
 
 		public function cacheInfo()
 		{
+		    $cache = WMAC_PluginCache::getUsedCache();
 			?>
 			<div class="form-group">
 				<label for="wbcr_mac_css_optimize" class="col-sm-6 control-label">
@@ -347,7 +350,7 @@ This can be fully automated for different types of pages with the Мinify And Co
 				</label>
 
 				<div class="control-group col-sm-6">
-					C:\OpenServer\domains\testwp.test\www/wp-content/cache/wmac/
+					<?php echo WMAC_CACHE_DIR ?>
 				</div>
 			</div>
 			<div class="form-group">
@@ -365,7 +368,7 @@ This can be fully automated for different types of pages with the Мinify And Co
 				</label>
 
 				<div class="control-group col-sm-6">
-					10 files, totalling 123,89 KB Kbytes (calculated at 08:37 UTC)
+					<?php echo $cache['percent'] . '%, ' . $cache['files'] ?> files, totalling <?php echo $cache['size'] ?> (calculated at <?php echo date('m:s') ?> UTC)
 				</div>
 			</div>
 			<div class="form-group">
@@ -417,4 +420,21 @@ This can be fully automated for different types of pages with the Мinify And Co
 			// Удаление опций из таблицы wp_options
 			$this->plugin->deleteOption('test');
 		}
+
+		/**
+		 * Добавляем кнопку сброса кеша в админ бар
+		 *
+		 * @param $wp_admin_bar
+		 */
+		public function addAdminBarMenu( $wp_admin_bar ) {
+			$args = array(
+				'id'    => 'clear-cache-btn',
+				'title' => WMAC_PluginCache::getUsedCache()['percent'] . '% ' . __('Очистить кеш', 'image-optimizer'),
+				'href'  => wp_nonce_url(
+					$this->getActionUrl( 'clear-cache' ), 'clear_cache_' . $this->getResultId()
+				)
+			);
+			$wp_admin_bar->add_node( $args );
+		}
+
 	}

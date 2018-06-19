@@ -75,7 +75,7 @@
 					$this->adminScripts();
 				}
 
-				add_action('plugins_loaded', array($this, 'pluginsLoaded'));
+				add_action( 'plugins_loaded', array( $this, 'pluginsLoaded' ) );
 			}
 			
 			/**
