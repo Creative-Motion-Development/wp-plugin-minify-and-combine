@@ -118,7 +118,6 @@ class WMAC_PluginMain
 
             if (
 	            WMAC_Plugin::app()->getOption('js_optimize')
-	            || WMAC_Plugin::app()->getOption('html_optimize')
 		        || WMAC_Plugin::app()->getOption('css_optimize')
 	        ) {
                 // Hook into WordPress frontend.
@@ -336,9 +335,6 @@ class WMAC_PluginMain
 	    if ( WMAC_Plugin::app()->getOption( 'css_optimize' ) ) {
 		    $classes[] = 'WMAC_PluginStyles';
 	    }
-	    if ( WMAC_Plugin::app()->getOption( 'html_optimize' ) ) {
-		    $classes[] = 'WMAC_PluginHTML';
-	    }
 
 	    $classoptions = array(
 		    'WMAC_PluginScripts' => array(
@@ -355,9 +351,6 @@ class WMAC_PluginMain
 			    'inline'         => WMAC_Plugin::app()->getOption( 'css_inline' ),
 			    'css_exclude'    => WMAC_Plugin::app()->getOption( 'css_exclude' ),
 			    'include_inline' => WMAC_Plugin::app()->getOption( 'css_include_inline' ),
-		    ),
-		    'WMAC_PluginHTML'    => array(
-			    'keepcomments' => WMAC_Plugin::app()->getOption( 'html_keepcomments' ),
 		    ),
 	    );
 

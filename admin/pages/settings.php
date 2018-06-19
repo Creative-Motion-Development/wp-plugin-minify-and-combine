@@ -241,47 +241,6 @@
 				'default' => false
 			);
 
-			// Произвольный html код
-			/*$options[] = array(
-				'type' => 'html',
-				'html' => array($this, 'rollbackButton')
-			);*/
-
-			$options[] = array(
-				'type' => 'html',
-				'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('HTML Options', 'minify-and-combine') . '</strong><p>' . __('Описание раздела оптимизация', 'minify-and-combine') . '</p></div>'
-			);
-
-			// Переключатель
-			$options[] = array(
-				'type' => 'checkbox',
-				'way' => 'buttons',
-				'name' => 'html_optimize',
-				'title' => __('Optimize HTML Code?', 'clearfy'),
-				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
-				//'hint' => __('Храните все данные EXIF ​​с ваших изображений. EXIF - это информация, хранящаяся на ваших фотографиях, таких как скорость затвора, компенсация экспозиции, ISO и т. Д. Подробнее ... Если вы фотограф, вам может быть интересен этот параметр, если вы показываете на своих страницах некоторую информацию, такую ​​как модель вашей камеры.', 'minify-and-combine'),
-				'default' => false,
-				// когда чекбокс включен показываем поле с классом .factory-control-resize_larger_w
-				/*'eventsOn' => array(
-					'show' => '.factory-control-resize_larger_w'
-				),*/
-				// когда чекбокс выключен, скрываем поле с классом .factory-control-resize_larger_w
-				/*'eventsOff' => array(
-					'hide' => '.factory-control-resize_larger_w'
-				)*/
-			);
-
-			// Переключатель
-			$options[] = array(
-				'type' => 'checkbox',
-				'way' => 'buttons',
-				'name' => 'html_keepcomments',
-				'title' => __('Keep HTML comments?', 'clearfy'),
-				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
-				'hint' => __('Enable this if you want HTML comments to remain in the page.', 'minify-and-combine'),
-				'default' => false
-			);
-
 			$options[] = array(
 				'type' => 'html',
 				'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('CSS Options', 'minify-and-combine') . '</strong><p>' . __('Описание раздела оптимизация', 'minify-and-combine') . '</p></div>'

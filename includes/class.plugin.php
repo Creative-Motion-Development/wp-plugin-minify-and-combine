@@ -167,12 +167,10 @@
 				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-scripts.php' );
 				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-css-min.php' );
 				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-styles.php' );
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-html.php' );
 				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-main.php' );
 				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-helper.php' );
 
 				require_once( WMAC_PLUGIN_DIR . '/includes/classes/ext/php/jsmin.php' );
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/ext/php/minify-html.php' );
 				require_once( WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Colors.php' );
 				require_once( WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Minifier.php' );
 				require_once( WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Utils.php' );

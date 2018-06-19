@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 abstract class WMAC_PluginBase
 {
     /**
-     * Holds content being processed (html, scripts, styles)
+     * Holds content being processed (scripts, styles)
      *
      * @var string
      */
