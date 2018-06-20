@@ -166,7 +166,7 @@ class WMAC_PluginCache
             $dir = rtrim( WMAC_CACHE_DIR . $name, '/' ) . '/';
             foreach ( $files as $file ) {
                 if ( self::isValidCacheFile( $dir, $file ) ) {
-                    @unlink( $dir . $file ); // @codingStandardsIgnoreLine
+	                @unlink( $dir . $file ); // @codingStandardsIgnoreLine
                 }
             }
         }

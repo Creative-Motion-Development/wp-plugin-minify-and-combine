@@ -368,7 +368,7 @@ This can be fully automated for different types of pages with the Мinify And Co
 				</label>
 
 				<div class="control-group col-sm-6">
-					<?php echo $cache['percent'] . '%, ' . $cache['files'] ?> files, totalling <?php echo $cache['size'] ?> (calculated at <?php echo date('m:s') ?> UTC)
+					<?php echo $cache['percent'] . '%, ' . $cache['files'] ?> files, totalling <?php echo $cache['size'] ?> (calculated at <?php echo gmdate('H:i') ?> UTC)
 				</div>
 			</div>
 			<div class="form-group">
