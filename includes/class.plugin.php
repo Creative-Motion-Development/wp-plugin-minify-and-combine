@@ -74,7 +74,10 @@
 				if( is_admin() ) {
 					$this->adminScripts();
 
-					if( is_multisite() ) {
+					if (
+						is_multisite()
+						&& apply_filters( 'wbcr_factory_000_core_admin_allow_multisite', false )
+					) {
 						$this->multisiteScripts();
 					}
 				}
