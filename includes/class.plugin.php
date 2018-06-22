@@ -73,6 +73,10 @@
 				
 				if( is_admin() ) {
 					$this->adminScripts();
+
+					if( is_multisite() ) {
+						$this->multisiteScripts();
+					}
 				}
 
 				add_action( 'plugins_loaded', array( $this, 'pluginsLoaded' ) );
@@ -138,12 +142,36 @@
 			}
 
 			/**
+			 * Регистрируем страницы плагина для мультисайта
+			 */
+			private function registerMultisitePages()
+			{
+				if ( is_network_admin() ) {
+					$admin_path = WMAC_PLUGIN_DIR . '/admin/pages';
+
+					self::app()->registerPage(
+						'WMAC_NetworkSettingsPage',
+						$admin_path . '/network-settings.php',
+						WBCR_PAGE_TYPE_NETWORK
+					);
+				}
+			}
+
+			/**
 			 * Подключаем функции бекенда
 			 */
 			private function adminScripts()
 			{
 				//require(WMAC_PLUGIN_DIR . '/admin/boot.php');
 				$this->registerPages();
+			}
+
+			/**
+			 * Подключаем функции для мультисайта
+			 */
+			private function multisiteScripts()
+			{
+				$this->registerMultisitePages();
 			}
 
 			/**

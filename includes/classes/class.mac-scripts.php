@@ -376,7 +376,7 @@ class WMAC_PluginScripts extends WMAC_PluginBase
             // Cache our code
             $cache->cache($this->jscode, 'text/javascript');
         }
-        $this->url = WMAC_CACHE_URL . $cache->getname();
+        $this->url = WMAC_PluginCache::getCacheUrl() . $cache->getname();
     }
 
 	/**

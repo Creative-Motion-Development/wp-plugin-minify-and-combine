@@ -23,13 +23,6 @@ class WMAC_PluginCache
     private $filename;
 
     /**
-     * Cache directory path (with a trailing slash).
-     *
-     * @var string
-     */
-    private $cachedir;
-
-    /**
      * Whether gzipping is done by the web server or us.
      * True => we don't gzip, the web server does it.
      * False => we do it ourselves.
@@ -46,7 +39,6 @@ class WMAC_PluginCache
      */
     public function __construct( $md5, $ext = 'php' )
     {
-        $this->cachedir = WMAC_CACHE_DIR;
         $this->nogzip   = WMAC_CACHE_NOGZIP;
         if ( ! $this->nogzip ) {
             $this->filename = WMAC_CACHEFILE_PREFIX . $md5 . '.php';
@@ -59,6 +51,30 @@ class WMAC_PluginCache
         }
     }
 
+	/**
+	 * Get cache dir
+	 *
+	 * @return string
+	 */
+	public static function getCacheDir() {
+		return WMAC_PluginCache::getPathname();
+    }
+
+	/**
+	 * Get cache url
+	 *
+	 * @return string
+	 */
+	public static function getCacheUrl()
+	{
+		if ( is_multisite() && apply_filters( 'wmac_separate_blog_caches', true ) ) {
+			$blog_id = get_current_blog_id();
+			return WMAC_PluginMain::getContentUrl() . WMAC_CACHE_CHILD_DIR . $blog_id . '/';
+		} else {
+			return WMAC_PluginMain::getContentUrl() . WMAC_CACHE_CHILD_DIR;
+		}
+	}
+
     /**
      * Returns true if the cached file exists on disk.
      *
@@ -66,7 +82,7 @@ class WMAC_PluginCache
      */
     public function check()
     {
-        return file_exists( $this->cachedir . $this->filename );
+        return file_exists( self::getCacheDir() . $this->filename );
     }
 
     /**
@@ -78,9 +94,9 @@ class WMAC_PluginCache
     {
         if ( $this->check() ) {
             if ( false == $this->nogzip ) {
-                return file_get_contents( $this->cachedir . $this->filename . '.none' );
+                return file_get_contents( self::getCacheDir() . $this->filename . '.none' );
             } else {
-                return file_get_contents( $this->cachedir . $this->filename );
+                return file_get_contents( self::getCacheDir() . $this->filename );
             }
         }
         return false;
@@ -102,14 +118,14 @@ class WMAC_PluginCache
             $phpcode = file_get_contents( WMAC_PLUGIN_DIR . '/config/' . $file );
             $phpcode = str_replace( array( '%%CONTENT%%', 'exit;' ), array( $mime, '' ), $phpcode );
 
-            file_put_contents( $this->cachedir . $this->filename, $phpcode );
-            file_put_contents( $this->cachedir . $this->filename . '.none', $data );
+            file_put_contents( self::getCacheDir() . $this->filename, $phpcode );
+            file_put_contents( self::getCacheDir() . $this->filename . '.none', $data );
         } else {
             // Write code to cache without doing anything else.
-            file_put_contents( $this->cachedir . $this->filename, $data );
+            file_put_contents( self::getCacheDir() . $this->filename, $data );
             if ( apply_filters( 'wmac_filter_cache_create_static_gzip', false ) ) {
                 // Create an additional cached gzip file.
-                file_put_contents( $this->cachedir . $this->filename . '.gz', gzencode( $data, 9, FORCE_GZIP ) );
+                file_put_contents( self::getCacheDir() . $this->filename . '.gz', gzencode( $data, 9, FORCE_GZIP ) );
             }
         }
     }
@@ -126,7 +142,7 @@ class WMAC_PluginCache
         // The original idea here was to provide 3rd party code a hook so that
         // it can "listen" to all the complete auto optimized-urls that the page
         // will emit... Or something to that effect I think?
-        apply_filters( 'wmac_filter_cache_getname', WMAC_CACHE_URL . $this->filename );
+        apply_filters( 'wmac_filter_cache_getname', WMAC_PluginCache::getCacheUrl() . $this->filename );
 
         return $this->filename;
     }
@@ -155,7 +171,7 @@ class WMAC_PluginCache
     }
 
     /**
-     * Clears contents of WMAC_CACHE_DIR.
+     * Clears contents of cache dir.
      *
      * @return void
      */
@@ -163,7 +179,7 @@ class WMAC_PluginCache
     {
         $contents = self::getCacheContents();
         foreach ( $contents as $name => $files ) {
-            $dir = rtrim( WMAC_CACHE_DIR . $name, '/' ) . '/';
+            $dir = rtrim( self::getCacheDir() . $name, '/' ) . '/';
             foreach ( $files as $file ) {
                 if ( self::isValidCacheFile( $dir, $file ) ) {
 	                @unlink( $dir . $file ); // @codingStandardsIgnoreLine
@@ -171,7 +187,7 @@ class WMAC_PluginCache
             }
         }
 
-        @unlink( WMAC_CACHE_DIR . '/.htaccess' ); // @codingStandardsIgnoreLine
+        @unlink( self::getCacheDir() . '/.htaccess' ); // @codingStandardsIgnoreLine
     }
 
     /**
@@ -198,7 +214,7 @@ class WMAC_PluginCache
     }
 
     /**
-     * Clears contents of WMAC_CACHE_DIR by renaming the current
+     * Clears contents of cache dir by renaming the current
      * cache directory into a new one with a unique name and then
      * re-creating the default (empty) cache directory.
      *
@@ -334,6 +350,28 @@ class WMAC_PluginCache
     }
 
     /**
+     * Deletes everything from the cache directories for all sites.
+     *
+     * @param bool $propagate Whether to trigger additional actions when cache is purged.
+     */
+    public static function clearAllMultisite( $propagate = true ) {
+	    $sites = get_sites( array(
+		    'archived' => 0,
+		    'mature'   => 0,
+		    'spam'     => 0,
+		    'deleted'  => 0,
+	    ) );
+
+	    foreach ( $sites as $site ) {
+		    switch_to_blog( $site->blog_id );
+
+		    self::clearAll( $propagate );
+
+		    restore_current_blog();
+	    }
+    }
+
+    /**
      * Deletes everything from the cache directories.
      *
      * @param bool $propagate Whether to trigger additional actions when cache is purged.
@@ -399,7 +437,7 @@ class WMAC_PluginCache
         $contents = array();
 
         foreach ( array( '', 'js', 'css' ) as $dir ) {
-            $contents[ $dir ] = scandir( WMAC_CACHE_DIR . $dir );
+            $contents[ $dir ] = scandir( self::getCacheDir() . $dir );
         }
 
         return $contents;
@@ -465,6 +503,43 @@ class WMAC_PluginCache
 		);
     }
 
+	/**
+	 * Return cache used data
+	 *
+	 * @return array
+	 */
+	public static function getUsedCacheMultisite() {
+		$files = $bytes = 0;
+
+		$sites = get_sites( array(
+			'archived' => 0,
+			'mature'   => 0,
+			'spam'     => 0,
+			'deleted'  => 0,
+		) );
+
+		foreach ( $sites as $site ) {
+			switch_to_blog( $site->blog_id );
+
+			// Retrieve the Autoptimize Cache Stats information.
+			$stats = WMAC_PluginCache::stats();
+
+			// Retrieve the current Total Files in cache.
+			$files += $stats[0];
+			// Retrieve the current Total Size of the cache.
+			$bytes += $stats[1];
+
+			restore_current_blog();
+		}
+
+		$size = WMAC_PluginHelper::format_filesize( $bytes );
+
+		return array(
+			'files' => $files,
+			'size'  => $size,
+		);
+	}
+
     /**
      * Performs a scan of cache directory contents and returns an array
      * with 3 values: count, size, timestamp.
@@ -481,7 +556,7 @@ class WMAC_PluginCache
 
         // Scan everything in our cache directories.
         foreach ( self::getCacheContents() as $name => $files ) {
-            $dir = rtrim( WMAC_CACHE_DIR . $name, '/' ) . '/';
+            $dir = rtrim( self::getCacheDir() . $name, '/' ) . '/';
             foreach ( $files as $file ) {
                 if ( self::isValidCacheFile( $dir, $file ) ) {
                     if ( WMAC_CACHE_NOGZIP &&
@@ -517,19 +592,14 @@ class WMAC_PluginCache
      */
     public static function cacheAvail()
     {
-        if ( ! defined( 'WMAC_CACHE_DIR' ) ) {
-            // We didn't set a cache.
-            return false;
-        }
-
         foreach ( array( '', 'js', 'css' ) as $dir ) {
-            if ( ! self::checkCacheDir( WMAC_CACHE_DIR . $dir ) ) {
+            if ( ! self::checkCacheDir( self::getCacheDir() . $dir ) ) {
                 return false;
             }
         }
 
         // Using .htaccess inside our cache folder to overrule wp-super-cache.
-        $htaccess = WMAC_CACHE_DIR . '/.htaccess';
+        $htaccess = self::getCacheDir() . '/.htaccess';
         if ( ! is_file( $htaccess ) ) {
             /**
              * Create `wp-content/AO_htaccess_tmpl` file with

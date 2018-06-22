@@ -50,7 +50,9 @@ class WMAC_PluginMain
     public function setup()
     {
         // Do we gzip in php when caching or is the webserver doing it?
-        define( 'WMAC_CACHE_NOGZIP', true /*(bool) get_option( 'wmac_cache_nogzip' )*/ );
+	    if ( ! defined( 'WMAC_CACHE_NOGZIP' ) ) {
+		    define( 'WMAC_CACHE_NOGZIP', true /*(bool) get_option( 'wmac_cache_nogzip' )*/ );
+	    }
 
         // These can be overridden by specifying them in wp-config.php or such.
         if ( ! defined( 'WMAC_WP_CONTENT_NAME' ) ) {
@@ -65,47 +67,16 @@ class WMAC_PluginMain
             define( 'WMAC_CACHEFILE_PREFIX', 'wmac_' );
         }
 
-        // Note: trailing slash is not optional!
-        if ( ! defined( 'WMAC_CACHE_DIR' ) ) {
-            define( 'WMAC_CACHE_DIR', WMAC_PluginCache::getPathname() );
-        }
-
-        define( 'WMAC_ROOT_DIR', substr( WP_CONTENT_DIR, 0, strlen( WP_CONTENT_DIR ) - strlen( WMAC_WP_CONTENT_NAME ) ) );
-
-        if ( ! defined( 'WMAC_WP_SITE_URL' ) ) {
-        	// domain_mapping_siteurl функция из плагина, который позволяет задавать свой домен для подсайта
-            if ( function_exists( 'domain_mapping_siteurl' ) ) {
-                define( 'WMAC_WP_SITE_URL', domain_mapping_siteurl( get_current_blog_id() ) );
-            } else {
-                define( 'WMAC_WP_SITE_URL', site_url() );
-            }
-        }
-
-        if ( ! defined( 'WMAC_WP_CONTENT_URL' ) ) {
-	        // get_original_url функция из плагина, который позволяет задавать свой домен для подсайта
-            if ( function_exists( 'get_original_url' ) ) {
-                define( 'WMAC_WP_CONTENT_URL', str_replace( get_original_url( WMAC_WP_SITE_URL ), WMAC_WP_SITE_URL, content_url() ) );
-            } else {
-                define( 'WMAC_WP_CONTENT_URL', content_url() );
-            }
-        }
-
-        if ( ! defined( 'WMAC_CACHE_URL' ) ) {
-        	// TODO этот код лучше вынести в отдельный метод аддона для работы с мультисайтами
-            if ( is_multisite() && apply_filters( 'wmac_separate_blog_caches', true ) ) {
-                $blog_id = get_current_blog_id();
-                define( 'WMAC_CACHE_URL', WMAC_WP_CONTENT_URL . WMAC_CACHE_CHILD_DIR . $blog_id . '/' );
-            } else {
-                define( 'WMAC_CACHE_URL', WMAC_WP_CONTENT_URL . WMAC_CACHE_CHILD_DIR );
-            }
-        }
+	    if ( ! defined( 'WMAC_ROOT_DIR' ) ) {
+		    define( 'WMAC_ROOT_DIR', substr( WP_CONTENT_DIR, 0, strlen( WP_CONTENT_DIR ) - strlen( WMAC_WP_CONTENT_NAME ) ) );
+	    }
 
         if ( ! defined( 'WMAC_WP_ROOT_URL' ) ) {
-            define( 'WMAC_WP_ROOT_URL', str_replace( WMAC_WP_CONTENT_NAME, '', WMAC_WP_CONTENT_URL ) );
+            define( 'WMAC_WP_ROOT_URL', str_replace( WMAC_WP_CONTENT_NAME, '', self::getContentUrl() ) );
         }
 
         if ( ! defined( 'WMAC_HASH' ) ) {
-            define( 'WMAC_HASH', wp_hash( WMAC_CACHE_URL ) );
+            define( 'WMAC_HASH', wp_hash( WMAC_PluginCache::getCacheUrl() ) );
         }
     }
 
@@ -453,9 +424,36 @@ class WMAC_PluginMain
         // Translators: %s is the cache directory location.
         printf(
         	__( 'Мinify And Combine cannot write to the cache directory (%s), please fix to enable CSS/ JS optimization!', 'minify-and-combine' ),
-	        WMAC_CACHE_DIR
+	        WMAC_PluginCache::getCacheDir()
         );
         echo '</p></div>';
+    }
+
+	/**
+	 * Get site url
+	 *
+	 * @return string
+	 */
+	public static function getSiteUrl() {
+		if ( function_exists( 'domain_mapping_siteurl' ) ) {
+			return domain_mapping_siteurl( get_current_blog_id() );
+		} else {
+			return site_url();
+		}
+    }
+
+	/**
+	 * Get content url
+	 *
+	 * @return string
+	 */
+	public static function getContentUrl() {
+		if ( function_exists( 'get_original_url' ) ) {
+			$site_url = self::getSiteUrl();
+			return str_replace( get_original_url( $site_url ), $site_url, content_url() );
+		} else {
+			return content_url();
+		}
     }
 
 }

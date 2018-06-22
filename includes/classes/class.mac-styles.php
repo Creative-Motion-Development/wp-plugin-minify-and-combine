@@ -772,7 +772,7 @@ class WMAC_PluginStyles extends WMAC_PluginBase
                 // Cache our code.
                 $cache->cache( $code, 'text/css' );
             }
-            $this->url[$media] = WMAC_CACHE_URL . $cache->getname();
+            $this->url[$media] = WMAC_PluginCache::getCacheUrl() . $cache->getname();
         }
     }
 
@@ -925,7 +925,7 @@ class WMAC_PluginStyles extends WMAC_PluginBase
                     // Relative URL.
                     /**
                      * rollback as per https://github.com/futtta/autoptimize/issues/94
-                     * $newurl = preg_replace( '/https?:/', '', str_replace( ' ', '%20', WMAC_WP_CONTENT_URL . str_replace( '//', '/', $dir . '/' . $url ) ) );
+                     * $newurl = preg_replace( '/https?:/', '', str_replace( ' ', '%20', WMAC_PluginMain::getContentUrl() . str_replace( '//', '/', $dir . '/' . $url ) ) );
                      */
                     $newurl = preg_replace( '/https?:/', '', str_replace( ' ', '%20', WMAC_WP_ROOT_URL . str_replace( '//', '/', $dir . '/' . $url ) ) );
 

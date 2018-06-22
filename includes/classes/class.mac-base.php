@@ -85,7 +85,8 @@ abstract class WMAC_PluginBase
             $url = urldecode( $url );
         }
 
-        $site_host    = parse_url( WMAC_WP_SITE_URL, PHP_URL_HOST );
+	    $site_url     = WMAC_PluginMain::getSiteUrl();
+        $site_host    = parse_url( $site_url, PHP_URL_HOST );
         $content_host = parse_url( WMAC_WP_ROOT_URL, PHP_URL_HOST );
 
         // Normalizing attempts...
@@ -97,15 +98,15 @@ abstract class WMAC_PluginBase
                 $url = 'http:' . $url;
             }
         } elseif ( ( false === $double_slash_position ) && ( false === strpos( $url, $site_host ) ) ) {
-            if ( WMAC_WP_SITE_URL === $site_host ) {
-                $url = WMAC_WP_SITE_URL . $url;
+            if ( $site_url === $site_host ) {
+                $url = $site_url . $url;
             } else {
-                $url = WMAC_WP_SITE_URL . WMAC_PluginHelper::pathCanonicalize( $url );
+                $url = $site_url . WMAC_PluginHelper::pathCanonicalize( $url );
             }
         }
 
         if ( $site_host !== $content_host ) {
-            $url = str_replace( WMAC_WP_CONTENT_URL, WMAC_WP_SITE_URL . WMAC_WP_CONTENT_NAME, $url );
+            $url = str_replace( WMAC_PluginMain::getContentUrl(), $site_url . WMAC_WP_CONTENT_NAME, $url );
         }
 
         // First check; hostname wp site should be hostname of url!
@@ -141,7 +142,7 @@ abstract class WMAC_PluginBase
 
         if ( $site_host !== $content_host ) {
             // As we replaced the content-domain with the site-domain, we should match against that.
-            $tmp_ao_root = preg_replace( '/https?:/', '', WMAC_WP_SITE_URL );
+            $tmp_ao_root = preg_replace( '/https?:/', '', $site_url );
         }
 
         $tmp_url = preg_replace( '/https?:/', '', $url );
@@ -638,7 +639,7 @@ abstract class WMAC_PluginBase
      */
     protected function buildMinifySingleUrl( WMAC_PluginCache $cache )
     {
-        $url = WMAC_CACHE_URL . $cache->getname();
+        $url = WMAC_PluginCache::getCacheUrl() . $cache->getname();
 
         return $url;
     }

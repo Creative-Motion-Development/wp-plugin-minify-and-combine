@@ -83,7 +83,6 @@
 		 *
 		 * @see libs\factory\pages\themplates\FactoryPages000_ImpressiveThemplate
 		 * @param $notices
-		 * @param Wbcr_Factory000_Plugin $plugin
 		 * @return array
 		 */
 		public function getActionNotices($notices)
@@ -350,7 +349,7 @@ This can be fully automated for different types of pages with the Мinify And Co
 				</label>
 
 				<div class="control-group col-sm-6">
-					<?php echo WMAC_CACHE_DIR ?>
+					<?php echo WMAC_PluginCache::getCacheDir() ?>
 				</div>
 			</div>
 			<div class="form-group">
@@ -427,14 +426,14 @@ This can be fully automated for different types of pages with the Мinify And Co
 		 * @param $wp_admin_bar
 		 */
 		public function addAdminBarMenu( $wp_admin_bar ) {
-			$args = array(
-				'id'    => 'clear-cache-btn',
-				'title' => WMAC_PluginCache::getUsedCache()['percent'] . '% ' . __('Очистить кеш', 'image-optimizer'),
-				'href'  => wp_nonce_url(
-					$this->getActionUrl( 'clear-cache' ), 'clear_cache_' . $this->getResultId()
-				)
-			);
-			$wp_admin_bar->add_node( $args );
+            $args = array(
+                'id'    => 'clear-cache-btn',
+                'title' => WMAC_PluginCache::getUsedCache()['percent'] . '% ' . __( 'Очистить кеш', 'image-optimizer' ),
+                'href'  => wp_nonce_url(
+                    $this->getActionUrl( 'clear-cache' ), 'clear_cache_' . $this->getResultId()
+                )
+            );
+            $wp_admin_bar->add_node( $args );
 		}
 
 	}

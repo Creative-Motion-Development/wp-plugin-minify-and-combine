@@ -241,7 +241,7 @@ class WMAC_PluginHelper
     }
 
     /**
-     * Parse WMAC_WP_SITE_URL into components using \parse_url(), but do
+     * Parse site URL into components using \parse_url(), but do
      * so only once per request/lifecycle.
      *
      * @return array
@@ -251,7 +251,7 @@ class WMAC_PluginHelper
         static $parts = array();
 
         if ( empty( $parts ) ) {
-            $parts = \parse_url( WMAC_WP_SITE_URL );
+            $parts = \parse_url( WMAC_PluginMain::getSiteUrl() );
         }
 
         return $parts;
