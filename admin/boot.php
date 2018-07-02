@@ -11,17 +11,6 @@
 		exit;
 	}
 
-	/*function wbcr_mac_rating_widget_url($page_url, $plugin_name)
-	{
-		if( $plugin_name == WMAC_Plugin::app()->getPluginName() ) {
-			return 'https://goo.gl/v4QkW5';
-		}
-
-		return $page_url;
-	}
-
-	add_filter('wbcr_factory_pages_000_imppage_rating_widget_url', 'wbcr_mac_rating_widget_url', 10, 2);
-
 	function wbcr_mac_group_options($options)
 	{
 		$options[] = array(
@@ -63,37 +52,12 @@
 
 	function wbcr_mac_allow_quick_mods($mods)
 	{
-		$mods['disable_all_comments'] = array(
-			'title' => __('One click disable all comments', 'minify-and-combine'),
-			'icon' => 'dashicons-testimonial'
+		$mod['minify_and_combine'] = array(
+			'title' => __('One click optimize JS, CSS', 'minify-and-combine'),
+			'icon' => 'dashicons-performance'
 		);
 		
-		return $mods;
+		return $mod + $mods;
 	}
 
 	add_filter("wbcr_clearfy_allow_quick_mods", 'wbcr_mac_allow_quick_mods');
-
-	function wbcr_mac_set_plugin_meta($links, $file)
-	{
-		if( $file == WMAC_PLUGIN_BASE ) {
-
-			$url = 'https://clearfy.pro';
-
-			if( get_locale() == 'ru_RU' ) {
-				$url = 'https://ru.clearfy.pro';
-			}
-
-			$url .= '?utm_source=wordpress.org&utm_campaign=' . WMAC_Plugin::app()->getPluginName();
-
-			$links[] = '<a href="' . $url . '" style="color: #FF5722;font-weight: bold;" target="_blank">' . __('Get ultimate plugin free', 'minify-and-combine') . '</a>';
-		}
-
-		return $links;
-	}
-
-	if( !defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ) {
-		add_filter('plugin_row_meta', 'wbcr_mac_set_plugin_meta', 10, 2);
-	}*/
-
-
-

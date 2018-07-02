@@ -74,15 +74,13 @@
 				if( is_admin() ) {
 					$this->adminScripts();
 
-					if (
-						is_multisite()
-						&& apply_filters( 'wbcr_factory_000_core_admin_allow_multisite', false )
+					if( is_multisite() && apply_filters('wbcr_factory_000_core_admin_allow_multisite', false)
 					) {
 						$this->multisiteScripts();
 					}
 				}
 
-				add_action( 'plugins_loaded', array( $this, 'pluginsLoaded' ) );
+				add_action('plugins_loaded', array($this, 'pluginsLoaded'));
 			}
 			
 			/**
@@ -107,7 +105,7 @@
 			protected function setTextDomain()
 			{
 				// Localization plugin
-				load_plugin_textdomain('image-optimizer', false, dirname(WMAC_PLUGIN_BASE) . '/languages/');
+				load_plugin_textdomain('minify-and-combibe', false, dirname(WMAC_PLUGIN_BASE) . '/languages/');
 			}
 
 			/**
@@ -149,14 +147,11 @@
 			 */
 			private function registerMultisitePages()
 			{
-				if ( is_network_admin() ) {
+				if( is_network_admin() ) {
 					$admin_path = WMAC_PLUGIN_DIR . '/admin/pages';
 
-					self::app()->registerPage(
-						'WMAC_NetworkSettingsPage',
-						$admin_path . '/network-settings.php',
-						WBCR_PAGE_TYPE_NETWORK
-					);
+					self::app()
+						->registerPage('WMAC_NetworkSettingsPage', $admin_path . '/network-settings.php', WBCR_PAGE_TYPE_NETWORK);
 				}
 			}
 
@@ -165,7 +160,7 @@
 			 */
 			private function adminScripts()
 			{
-				//require(WMAC_PLUGIN_DIR . '/admin/boot.php');
+				require_once(WMAC_PLUGIN_DIR . '/admin/boot.php');
 				$this->registerPages();
 			}
 
@@ -184,6 +179,7 @@
 			{
 				//require(WMAC_PLUGIN_DIR . '/includes/classes/class.configurate-comments.php');
 				//new WMAC_ConfigComments(self::$app);
+				require_once(WMAC_PLUGIN_DIR . '/includes/boot.php');
 			}
 
 			/**
@@ -192,19 +188,19 @@
 			 */
 			public function pluginsLoaded()
 			{
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-base.php' );
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-cache.php' );
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-cache-checker.php' );
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-scripts.php' );
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-css-min.php' );
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-styles.php' );
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-main.php' );
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/class.mac-helper.php' );
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-base.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-cache.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-cache-checker.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-scripts.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-css-min.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-styles.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-main.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-helper.php');
 
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/ext/php/jsmin.php' );
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Colors.php' );
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Minifier.php' );
-				require_once( WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Utils.php' );
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/jsmin.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Colors.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Minifier.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Utils.php');
 
 				$plugin = new WMAC_PluginMain();
 				$plugin->start();

@@ -24,7 +24,7 @@
 		 */
 		public $id = "minify_and_combine"; // Уникальный идентификатор страницы
 		public $page_menu_dashicon = 'dashicons-testimonial'; // Иконка для закладки страницы, дашикон
-		//public $page_parent_page = "image_optimizer"; // Уникальный идентификатор родительской страницы
+		public $page_parent_page = "performance"; // Уникальный идентификатор родительской страницы
 
 		/**
 		 * @param Wbcr_Factory000_Plugin $plugin
@@ -32,7 +32,7 @@
 		public function __construct(Wbcr_Factory000_Plugin $plugin)
 		{
 			// Заголовок страницы
-			$this->menu_title = __('Minify And Combine', 'minify-and-combine');
+			$this->menu_title = __('Minify And Combine (JS/CSS)', 'minify-and-combine');
 
 			// Если плагин загружен, как самостоятельный, то мы меняем настройки страницы и делаем ее внешней,
 			// а не внутренней страницей родительского плагина. Внешнии страницы добавляются в Wordpress меню "Общие"
@@ -44,18 +44,19 @@
 				$this->menu_target = 'options-general.php';
 				// Если true, добавляет ссылку "Настройки", рядом с действиями активации, деактивации плагина, на странице плагинов.
 				$this->add_link_to_plugin_actions = true;
+
+				$this->page_parent_page = null;
 			}
 
 			parent::__construct($plugin);
 
-			add_action( 'admin_bar_menu', array( $this, 'addAdminBarMenu' ), 999 );
 		}
 
 		// Метод позволяет менять заголовок меню, в зависимости от сборки плагина.
 		public function getMenuTitle()
 		{
 			return defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON')
-				? __('Minify And Combine', 'minify-and-combine')
+				? __('Scripts Minify And Combine', 'minify-and-combine')
 				: __('General', 'minify-and-combine');
 		}
 
@@ -96,34 +97,9 @@
 				'message' => __('Кеш успешно очищен.', 'minify-and-combine')
 			);
 
-			$notices[] = array(
-				'conditions' => array(
-					'wbcr_mac_test_success' => 1
-				),
-				'type' => 'success',
-				'message' => __('Пример успешного выполненного уведомления.', 'minify-and-combine')
-			);
-
-			$notices[] = array(
-				'conditions' => array(
-					'wbcr_mac_test_error' => 1,
-					'wbcr_mac_code' => 'interal_error'
-				),
-				'type' => 'danger',
-				'message' => __('Пример уведомления об ошибке.', 'minify-and-combine')
-			);
-
 			return $notices;
 		}
 
-		/**
-		 * Вызывается всегда при загрузке страницы, перед опциями формы с типом страницы options
-		 */
-		protected function warningNotice()
-		{
-			$this->printErrorNotice(__("The backup folder wp-content/uploads/backup/ cannot be created or is not writable by the server, original images cannot be saved!", 'wbcr_factory_pages_000'));
-		}
-		
 		/**
 		 * Метод должен передать массив опций для создания формы с полями.
 		 * Созданием страницы и формы занимается фреймворк
@@ -341,7 +317,7 @@ This can be fully automated for different types of pages with the Мinify And Co
 
 		public function cacheInfo()
 		{
-		    $cache = WMAC_PluginCache::getUsedCache();
+			$cache = WMAC_PluginCache::getUsedCache();
 			?>
 			<div class="form-group">
 				<label for="wbcr_mac_css_optimize" class="col-sm-6 control-label">
@@ -367,7 +343,8 @@ This can be fully automated for different types of pages with the Мinify And Co
 				</label>
 
 				<div class="control-group col-sm-6">
-					<?php echo $cache['percent'] . '%, ' . $cache['files'] ?> files, totalling <?php echo $cache['size'] ?> (calculated at <?php echo gmdate('H:i') ?> UTC)
+					<?php echo $cache['percent'] . '%, ' . $cache['files'] ?> files,
+					totalling <?php echo $cache['size'] ?> (calculated at <?php echo gmdate('H:i') ?> UTC)
 				</div>
 			</div>
 			<div class="form-group">
@@ -396,44 +373,4 @@ This can be fully automated for different types of pages with the Мinify And Co
 			// редирект с выводом уведомления
 			$this->redirectToAction('index', array('wbcr_mac_clear_cache_success' => 1));
 		}
-
-		/**
-		 * Действие для страницы
-		 * Если мы перейдем по ссылке
-		 * http://testwp.test/wp-admin/options-general.php?page=image_optimizer-wbcr_image_optimizer&action=simple
-		 * То будет вызван этот медот для дальнейшей обрабоки действия
-		 */
-		public function simpleAction()
-		{
-			// Получение get переменных
-			$var1 = $this->plugin->request->get('var1');
-			// Получение post переменных
-			$var2 = $this->plugin->request->post('var2');
-
-			// Получение опций из таблицы wp_options
-			$option = $this->plugin->getOption('test', 'default');
-
-			// Обновление опций из таблицы wp_options
-			$this->plugin->updateOption('test', '1');
-
-			// Удаление опций из таблицы wp_options
-			$this->plugin->deleteOption('test');
-		}
-
-		/**
-		 * Добавляем кнопку сброса кеша в админ бар
-		 *
-		 * @param $wp_admin_bar
-		 */
-		public function addAdminBarMenu( $wp_admin_bar ) {
-            $args = array(
-                'id'    => 'clear-cache-btn',
-                'title' => WMAC_PluginCache::getUsedCache()['percent'] . '% ' . __( 'Очистить кеш', 'image-optimizer' ),
-                'href'  => wp_nonce_url(
-                    $this->getActionUrl( 'clear-cache' ), 'clear_cache_' . $this->getResultId()
-                )
-            );
-            $wp_admin_bar->add_node( $args );
-		}
-
 	}
