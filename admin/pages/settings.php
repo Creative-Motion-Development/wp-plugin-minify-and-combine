@@ -46,6 +46,8 @@
 				$this->add_link_to_plugin_actions = true;
 
 				$this->page_parent_page = null;
+
+				$this->available_for_multisite = true;
 			}
 
 			parent::__construct($plugin);
@@ -317,15 +319,17 @@ This can be fully automated for different types of pages with the Мinify And Co
 
 		public function cacheInfo()
 		{
-			$cache = WMAC_PluginCache::getUsedCache();
+			$is_network = is_network_admin();
+
+			$cache = $is_network ? WMAC_PluginCache::getUsedCacheMultisite() : WMAC_PluginCache::getUsedCache();
 			?>
 			<div class="form-group">
 				<label for="wbcr_mac_css_optimize" class="col-sm-6 control-label">
-					Cache folder
+					Cache folder<?php echo $is_network ? 's' : '' ?>
 				</label>
 
 				<div class="control-group col-sm-6">
-					<?php echo WMAC_PluginCache::getCacheDir() ?>
+					<?php echo $is_network ? WP_CONTENT_DIR . WMAC_CACHE_CHILD_DIR . '[...]/' : WMAC_PluginCache::getCacheDir() ?>
 				</div>
 			</div>
 			<div class="form-group">
@@ -339,12 +343,17 @@ This can be fully automated for different types of pages with the Мinify And Co
 			</div>
 			<div class="form-group">
 				<label for="wbcr_mac_css_optimize" class="col-sm-6 control-label">
-					Cached styles and scripts
+					Cached styles and scripts<?php echo $is_network ? ' (all sites)' : '' ?>
 				</label>
 
 				<div class="control-group col-sm-6">
-					<?php echo $cache['percent'] . '%, ' . $cache['files'] ?> files,
-					totalling <?php echo $cache['size'] ?> (calculated at <?php echo gmdate('H:i') ?> UTC)
+                <?php if ( $is_network ) : ?>
+                    <?php echo $cache['files'] ?> files, totalling <?php echo $cache['size'] ?> (calculated
+                    at <?php echo gmdate('H:i') ?> UTC)
+                <?php else: ?>
+                    <?php echo $cache['percent'] . '%, ' . $cache['files'] ?> files,
+                    totalling <?php echo $cache['size'] ?> (calculated at <?php echo gmdate('H:i') ?> UTC)
+                <?php endif; ?>
 				</div>
 			</div>
 			<div class="form-group">
@@ -368,7 +377,11 @@ This can be fully automated for different types of pages with the Мinify And Co
 		{
 			check_admin_referer('clear_cache_' . $this->getResultId());
 
-			WMAC_PluginCache::clearAll();
+			if ( is_network_admin() ) {
+				WMAC_PluginCache::clearAllMultisite();
+            } else {
+				WMAC_PluginCache::clearAll();
+			}
 
 			// редирект с выводом уведомления
 			$this->redirectToAction('index', array('wbcr_mac_clear_cache_success' => 1));
