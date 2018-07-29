@@ -51,7 +51,6 @@
 			}
 
 			parent::__construct($plugin);
-
 		}
 
 		// Метод позволяет менять заголовок меню, в зависимости от сборки плагина.
@@ -60,25 +59,6 @@
 			return defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON')
 				? __('Scripts Minify And Combine', 'minify-and-combine')
 				: __('General', 'minify-and-combine');
-		}
-
-		/**
-		 * Подключаем скрипты и стили для страницы
-		 *
-		 * @see Wbcr_FactoryPages000_AdminPage
-		 *
-		 * @since 1.0.0
-		 * @return void
-		 */
-		public function assets($scripts, $styles)
-		{
-			parent::assets($scripts, $styles);
-
-			// Способ подключения стилей
-			$this->styles->add(WMAC_PLUGIN_URL . '/admin/assets/css/general.css');
-
-			// Способ подключения скриптов
-			$this->scripts->add(WMAC_PLUGIN_URL . '/admin/assets/js/general.js');
 		}
 
 		/**
@@ -96,7 +76,7 @@
 					'wbcr_mac_clear_cache_success' => 1
 				),
 				'type' => 'success',
-				'message' => __('Кеш успешно очищен.', 'minify-and-combine')
+				'message' => __('The cache has been successfully cleaned.', 'minify-and-combine')
 			);
 
 			return $notices;
@@ -115,50 +95,10 @@
 
 			$options[] = array(
 				'type' => 'html',
-				'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('JavaScript Options', 'minify-and-combine') . '</strong><p>' . __('Описание общих настроек', 'minify-and-combine') . '</p></div>'
+				'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('JavaScript Options', 'minify-and-combine') . '</strong><p>' . __('', 'minify-and-combine') . '</p></div>'
 			);
 
-			// Радио переключатель
-			/*$options[] = array(
-				'type' => 'dropdown',
-				'name' => 'image_optimization_level',
-				'way' => 'buttons',
-				'title' => __('Режим сжатия', 'minify-and-combine'),
-				'data' => array(
-					array(
-						'normal',
-						__('Нормальный', 'minify-and-combine'),
-						__('Этот режим обеспечивает оптимизацию без потерь, ваши изображения будут оптимизированы без видимых изменений. Если вы хотите идеальное качество для своих изображений, мы рекомендуем вам этот режим. Примечание. Уменьшение размера файла будет меньше, по сравнению с агрессивным режимом.', 'minify-and-combine')
-					),
-					array(
-						'aggresive',
-						__('Средний', 'minify-and-combine'),
-						__('Этот режим обеспечивает идеальную оптимизацию ваших изображений без существенных потерь качества. Это обеспечит существенную экономию на начальном весе при небольшом снижении качества изображения. Большую часть времени это даже не заметно. Если вам требуется максимальное снижение веса, мы рекомендуем использовать этот режим.', 'minify-and-combine')
-					),
-					array(
-						'ultra',
-						__('Высокий', 'minify-and-combine'),
-						__('Этот режим будет применять все доступные оптимизации для максимального сжатия изображения. Это обеспечит огромную экономию на начальном весе. Иногда качество изображения может немного ухудшаться. Если вам требуется максимальное снижение веса, и вы соглашаетесь потерять качество изображения, мы рекомендуем использовать этот режим.', 'minify-and-combine')
-					)
-				),
-				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
-				'hint' => __('Everywhere - Warning: This option is global and will affect your entire site. Use it only if you want to disable comments everywhere. A complete description of what this option does is available here', 'minify-and-combine') . '<br><br>' . __('On certain post types - Disabling comments will also disable trackbacks and pingbacks. All comment-related fields will also be hidden from the edit/quick-edit screens of the affected posts. These settings cannot be overridden for individual posts.', 'minify-and-combine'),
-				'default' => 'normal',
-				'events' => array(
-					'disable_certain_post_types_comments' => array(
-						'show' => '.factory-control-disable_comments_for_post_types, #wbcr-clearfy-comments-base-options'
-					),
-					'enable_comments' => array(
-						'show' => '#wbcr-clearfy-comments-base-options',
-						'hide' => '.factory-control-disable_comments_for_post_types'
-					),
-					'disable_comments' => array(
-						'hide' => '.factory-control-disable_comments_for_post_types, #wbcr-clearfy-comments-base-options'
-					)
-				)
-			);*/
-
-			// Переключатель
+			
 			$options[] = array(
 				'type' => 'checkbox',
 				'way' => 'buttons',
@@ -166,11 +106,17 @@
 				'title' => __('Optimize JavaScript Code?', 'clearfy'),
 				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				//'hint' => __('Optimize JavaScript Code.', 'minify-and-combine'),
-				'default' => false
+				'default' => false,
+				'eventsOn' => array(
+					'show' => '#wbcr-clr-optimize-js-fields'
+				),
+				'eventsOff' => array(
+					'hide' => '#wbcr-clr-optimize-js-fields'
+				)
 			);
 
-			// Переключатель
-			$options[] = array(
+
+			$js_options[] = array(
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'js_aggregate',
@@ -180,8 +126,7 @@
 				'default' => false
 			);
 
-			// Переключатель
-			$options[] = array(
+			$js_options[] = array(
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'js_include_inline',
@@ -191,7 +136,7 @@
 				'default' => false
 			);
 
-			$options[] = array(
+			$js_options[] = array(
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'js_forcehead',
@@ -201,7 +146,7 @@
 				'default' => false
 			);
 
-			$options[] = array(
+			$js_options[] = array(
 				'type' => 'textarea',
 				'name' => 'js_exclude',
 				'title' => __('Exclude scripts from Мinify And Combine:', 'clearfy'),
@@ -210,7 +155,7 @@
 				'default' => 'seal.js, js/jquery/jquery.js'
 			);
 
-			$options[] = array(
+			$js_options[] = array(
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'js_trycatch',
@@ -221,8 +166,14 @@
 			);
 
 			$options[] = array(
+				'type' => 'div',
+				'id' => 'wbcr-clr-optimize-js-fields',
+				'items' => $js_options
+			);
+
+			$options[] = array(
 				'type' => 'html',
-				'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('CSS Options', 'minify-and-combine') . '</strong><p>' . __('Описание раздела оптимизация', 'minify-and-combine') . '</p></div>'
+				'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('CSS Options', 'minify-and-combine') . '</strong><p>' . __('', 'minify-and-combine') . '</p></div>'
 			);
 
 			$options[] = array(
@@ -232,10 +183,16 @@
 				'title' => __('Optimize CSS Code?', 'clearfy'),
 				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('If your scripts break because of a JS-error, you might want to try this.', 'minify-and-combine'),
-				'default' => false
+				'default' => false,
+				'eventsOn' => array(
+					'show' => '#wbcr-clr-optimize-css-fields'
+				),
+				'eventsOff' => array(
+					'hide' => '#wbcr-clr-optimize-css-fields'
+				)
 			);
 
-			$options[] = array(
+			$css_options[] = array(
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'css_aggregate',
@@ -245,7 +202,7 @@
 				'default' => false
 			);
 
-			$options[] = array(
+			$css_options[] = array(
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'css_include_inline',
@@ -255,7 +212,7 @@
 				'default' => false
 			);
 
-			$options[] = array(
+			$css_options[] = array(
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'css_datauris',
@@ -265,7 +222,7 @@
 				'default' => false
 			);
 
-			$options[] = array(
+			$css_options[] = array(
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'css_defer',
@@ -276,7 +233,7 @@ This can be fully automated for different types of pages with the Мinify And Co
 				'default' => false
 			);
 
-			$options[] = array(
+			$css_options[] = array(
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'css_inline',
@@ -286,13 +243,19 @@ This can be fully automated for different types of pages with the Мinify And Co
 				'default' => false
 			);
 
-			$options[] = array(
+			$css_options[] = array(
 				'type' => 'textarea',
 				'name' => 'css_exclude',
 				'title' => __('Exclude CSS from Мinify And Combine:', 'clearfy'),
 				//'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('A comma-separated list of CSS you want to exclude from being optimized.', 'minify-and-combine'),
 				'default' => 'wp-content/cache/, wp-content/uploads/, admin-bar.min.css, dashicons.min.css'
+			);
+
+			$options[] = array(
+				'type' => 'div',
+				'id' => 'wbcr-clr-optimize-css-fields',
+				'items' => $css_options
 			);
 
 			$options[] = array(
@@ -321,15 +284,21 @@ This can be fully automated for different types of pages with the Мinify And Co
 		{
 			$is_network = is_network_admin();
 
-			$cache = $is_network ? WMAC_PluginCache::getUsedCacheMultisite() : WMAC_PluginCache::getUsedCache();
+			$cache = $is_network
+				? WMAC_PluginCache::getUsedCacheMultisite()
+				: WMAC_PluginCache::getUsedCache();
 			?>
 			<div class="form-group">
 				<label for="wbcr_mac_css_optimize" class="col-sm-6 control-label">
-					Cache folder<?php echo $is_network ? 's' : '' ?>
+					Cache folder<?php echo $is_network
+						? 's'
+						: '' ?>
 				</label>
 
 				<div class="control-group col-sm-6">
-					<?php echo $is_network ? WP_CONTENT_DIR . WMAC_CACHE_CHILD_DIR . '[...]/' : WMAC_PluginCache::getCacheDir() ?>
+					<?php echo $is_network
+						? WP_CONTENT_DIR . WMAC_CACHE_CHILD_DIR . '[...]/'
+						: WMAC_PluginCache::getCacheDir() ?>
 				</div>
 			</div>
 			<div class="form-group">
@@ -343,17 +312,19 @@ This can be fully automated for different types of pages with the Мinify And Co
 			</div>
 			<div class="form-group">
 				<label for="wbcr_mac_css_optimize" class="col-sm-6 control-label">
-					Cached styles and scripts<?php echo $is_network ? ' (all sites)' : '' ?>
+					Cached styles and scripts<?php echo $is_network
+						? ' (all sites)'
+						: '' ?>
 				</label>
 
 				<div class="control-group col-sm-6">
-                <?php if ( $is_network ) : ?>
-                    <?php echo $cache['files'] ?> files, totalling <?php echo $cache['size'] ?> (calculated
-                    at <?php echo gmdate('H:i') ?> UTC)
-                <?php else: ?>
-                    <?php echo $cache['percent'] . '%, ' . $cache['files'] ?> files,
-                    totalling <?php echo $cache['size'] ?> (calculated at <?php echo gmdate('H:i') ?> UTC)
-                <?php endif; ?>
+					<?php if( $is_network ) : ?>
+						<?php echo $cache['files'] ?> files, totalling <?php echo $cache['size'] ?> (calculated
+						at <?php echo gmdate('H:i') ?> UTC)
+					<?php else: ?>
+						<?php echo $cache['percent'] . '%, ' . $cache['files'] ?> files,
+						totalling <?php echo $cache['size'] ?> (calculated at <?php echo gmdate('H:i') ?> UTC)
+					<?php endif; ?>
 				</div>
 			</div>
 			<div class="form-group">
@@ -361,8 +332,9 @@ This can be fully automated for different types of pages with the Мinify And Co
 				</label>
 
 				<div class="control-group col-sm-6">
-					<a class="btn btn-default" href="<?= wp_nonce_url($this->getActionUrl('clear-cache'), 'clear_cache_' . $this->getResultId()); ?>">Очистить
-						кеш</a>
+					<a class="btn btn-default" href="<?= wp_nonce_url($this->getActionUrl('clear-cache'), 'clear_cache_' . $this->getResultId()); ?>">
+						<?php _e('Clear cache', 'minify-and-combine') ?>
+					</a>
 				</div>
 			</div>
 		<?php
@@ -377,9 +349,9 @@ This can be fully automated for different types of pages with the Мinify And Co
 		{
 			check_admin_referer('clear_cache_' . $this->getResultId());
 
-			if ( is_network_admin() ) {
+			if( is_network_admin() ) {
 				WMAC_PluginCache::clearAllMultisite();
-            } else {
+			} else {
 				WMAC_PluginCache::clearAll();
 			}
 

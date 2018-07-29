@@ -13,35 +13,81 @@
 
 	function wbcr_mac_group_options($options)
 	{
+		/**
+		 * Js optimize
+		 */
 		$options[] = array(
-			'name' => 'disable_comments',
-			'title' => __('Disable comments on the entire site', 'minify-and-combine'),
-			'tags' => array('disable_all_comments'),
-			'values' => array('disable_all_comments' => 'disable_comments')
+			'name' => 'js_optimize',
+			'title' => __('Optimize JavaScript Code?', 'minify-and-combine'),
+			'tags' => array('optimize_code', 'hide_my_wp')
 		);
 		$options[] = array(
-			'name' => 'disable_comments_for_post_types',
-			'title' => __('Select post types', 'minify-and-combine'),
+			'name' => 'js_aggregate',
+			'title' => __('Aggregate JS-files?', 'minify-and-combine'),
+			'tags' => array('optimize_code', 'hide_my_wp')
+		);
+		$options[] = array(
+			'name' => 'js_include_inline',
+			'title' => __('Also aggregate inline JS?', 'minify-and-combine'),
+			'tags' => array('hide_my_wp')
+		);
+		$options[] = array(
+			'name' => 'js_forcehead',
+			'title' => __('Force JavaScript in &lt;head&gt;?', 'minify-and-combine'),
 			'tags' => array()
 		);
 		$options[] = array(
-			'name' => 'comment_text_convert_links_pseudo',
-			'title' => __('Replace external links in comments on the JavaScript code', 'minify-and-combine'),
-			'tags' => array('recommended', 'seo_optimize')
+			'name' => 'js_exclude',
+			'title' => __('Exclude scripts from Мinify And Combine:', 'minify-and-combine'),
+			'tags' => array()
 		);
 		$options[] = array(
-			'name' => 'pseudo_comment_author_link',
-			'title' => __('Replace external links from comment authors on the JavaScript code', 'minify-and-combine'),
-			'tags' => array('recommended', 'seo_optimize')
+			'name' => 'js_trycatch',
+			'title' => __('Add try-catch wrapping?', 'minify-and-combine'),
+			'tags' => array()
 		);
+		/**
+		 * CSS optimize
+		 */
 		$options[] = array(
-			'name' => 'remove_x_pingback',
-			'title' => __('Disable X-Pingback', 'minify-and-combine'),
-			'tags' => array('recommended', 'defence', 'disable_all_comments')
+			'name' => 'css_optimize',
+			'title' => __('Optimize CSS Code?', 'minify-and-combine'),
+			'tags' => array('optimize_code', 'hide_my_wp')
 		);
+
 		$options[] = array(
-			'name' => 'remove_url_from_comment_form',
-			'title' => __('Remove field "site" in comment form', 'minify-and-combine'),
+			'name' => 'css_aggregate',
+			'title' => __('Aggregate CSS-files?', 'minify-and-combine'),
+			'tags' => array('optimize_code', 'hide_my_wp')
+		);
+
+		$options[] = array(
+			'name' => 'css_include_inline',
+			'title' => __('Also aggregate inline CSS?', 'minify-and-combine'),
+			'tags' => array('hide_my_wp')
+		);
+
+		$options[] = array(
+			'name' => 'css_datauris',
+			'title' => __('Generate data: URIs for images?', 'minify-and-combine'),
+			'tags' => array()
+		);
+
+		$options[] = array(
+			'name' => 'css_defer',
+			'title' => __('Inline and Defer CSS?', 'minify-and-combine'),
+			'tags' => array()
+		);
+
+		$options[] = array(
+			'name' => 'css_inline',
+			'title' => __('Inline all CSS?', 'minify-and-combine'),
+			'tags' => array()
+		);
+
+		$options[] = array(
+			'name' => 'css_exclude',
+			'title' => __('Exclude CSS from Мinify And Combine', 'minify-and-combine'),
 			'tags' => array()
 		);
 
@@ -50,13 +96,25 @@
 
 	add_filter("wbcr_clearfy_group_options", 'wbcr_mac_group_options');
 
+	/**
+	 * Adds a new mode to the Quick Setup page
+	 *
+	 * @param array $mods
+	 * @return mixed
+	 */
 	function wbcr_mac_allow_quick_mods($mods)
 	{
-		$mod['minify_and_combine'] = array(
-			'title' => __('One click optimize JS, CSS', 'minify-and-combine'),
+		if( !defined('WHTM_PLUGIN_ACTIVE') ) {
+			$title = __('One click optimize scripts (js, css)', 'minify-and-combine');
+		} else {
+			$title = __('One click optimize html code and scripts', 'minify-and-combine');
+		}
+
+		$mod['optimize_code'] = array(
+			'title' => $title,
 			'icon' => 'dashicons-performance'
 		);
-		
+
 		return $mod + $mods;
 	}
 
