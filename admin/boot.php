@@ -29,7 +29,7 @@
 		$options[] = array(
 			'name' => 'js_include_inline',
 			'title' => __('Also aggregate inline JS?', 'minify-and-combine'),
-			'tags' => array('hide_my_wp')
+			'tags' => array()
 		);
 		$options[] = array(
 			'name' => 'js_forcehead',
@@ -58,13 +58,13 @@
 		$options[] = array(
 			'name' => 'css_aggregate',
 			'title' => __('Aggregate CSS-files?', 'minify-and-combine'),
-			'tags' => array('optimize_code', 'hide_my_wp')
+			'tags' => array()
 		);
 
 		$options[] = array(
 			'name' => 'css_include_inline',
 			'title' => __('Also aggregate inline CSS?', 'minify-and-combine'),
-			'tags' => array('hide_my_wp')
+			'tags' => array()
 		);
 
 		$options[] = array(

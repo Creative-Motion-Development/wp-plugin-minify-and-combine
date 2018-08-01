@@ -1,13 +1,21 @@
 <?php
 	/**
 	 * Plugin Name: Мinify And Combine
-	 * Plugin URI:
+	 * Plugin URI: https://clearfy.pro/minify-and-combine/
 	 * Description: Optimizes your website, concatenating the CSS and JavaScript code, and compressing it.
 	 * Author: Webcraftic <wordpress.webraftic@gmail.com>
 	 * Version: 1.0.0
 	 * Text Domain: minify-and-combine
 	 * Domain Path: /languages/
-	 * Author URI:
+	 * Author URI: https://clearfy.pro
+	 */
+
+	/*
+	 * #### CREDITS ####
+	 * This plugin is based on the plugin Autoptimize by the author Frank Goossens, we have finalized this code for our project and our goals.
+	 * Many thanks to Frank Goossens for the quality solution for optimizing scripts in Wordpress.
+	 *
+	 * Public License is a GPLv2 compatible license allowing you to change and use this version of the plugin for free.
 	 */
 
 	// Exit if accessed directly
@@ -16,15 +24,33 @@
 	}
 
 	/**
-	 * Уведомление о том, что этот плагин используется уже в составе плагина Clearfy, как его компонент.
-	 * Мы блокируем работу этого плагина, чтобы не вызывать конфликт.
+	 * Troubleshoot old versions of PHP on the client server
 	 */
+	if( version_compare(PHP_VERSION, '5.4.0', '<') ) {
+		function wbcr_mac_admin_notice_php_error()
+		{
+			?>
+			<div class="notice notice-error">
+				<p><?php _e('The job of the component "Minify and Combine" component has been suspended! You are using the old version of PHP. Please update the PHP version to 5.4 or later to continue to use this component!', 'minify-and-combine'); ?></p>
+			</div>
+		<?php
+		}
+
+		add_action('admin_notices', 'wbcr_mac_admin_notice_php_error');
+		return;
+	}
+
+
+	/**
+	* Notification that this plugin is already used as part of the Clearfy plugin as its component.
+	* We block the work of this plugin, so as not to cause conflict.
+	*/
 	if( defined('WMAC_PLUGIN_ACTIVE') || (defined('WMAC_PLUGIN_ACTIVE') && !defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON')) ) {
 		function wbcr_mac_admin_notice_error()
 		{
 			?>
 			<div class="notice notice-error">
-				<p><?php _e('We found that you have the "Clearfy - wordpress optimization plugin" plugin installed, this plugin already has disable comments functions, so you can deactivate plugin "Image optimizer"!'); ?></p>
+				<p><?php _e('We found that you have the "Clearfy - wordpress optimization plugin" plugin installed, this plugin already has "Minify and combine" functions, so you can deactivate plugin "Minify and combine"!'); ?></p>
 			</div>
 		<?php
 		}
