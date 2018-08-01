@@ -70,7 +70,6 @@
 		 */
 		public function getActionNotices($notices)
 		{
-
 			$notices[] = array(
 				'conditions' => array(
 					'wbcr_mac_clear_cache_success' => 1
