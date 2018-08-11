@@ -24,7 +24,7 @@
 		$options[] = array(
 			'name' => 'js_aggregate',
 			'title' => __('Aggregate JS-files?', 'minify-and-combine'),
-			'tags' => array('optimize_code', 'hide_my_wp')
+			'tags' => array('optimize_code')
 		);
 		$options[] = array(
 			'name' => 'js_include_inline',
