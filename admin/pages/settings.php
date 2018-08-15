@@ -62,6 +62,24 @@
 		}
 
 		/**
+		 * Requests assets (js and css) for the page.
+		 *
+		 * @see Wbcr_FactoryPages000_AdminPage
+		 *
+		 * @since 1.0.0
+		 * @return void
+		 */
+		public function assets($scripts, $styles)
+		{
+			parent::assets($scripts, $styles);
+
+			// Add Clearfy styles for HMWP pages
+			if( defined('WBCR_CLEARFY_PLUGIN_ACTIVE') ) {
+				$this->styles->add(WCL_PLUGIN_URL . '/admin/assets/css/general.css');
+			}
+		}
+
+		/**
 		 * Регистрируем уведомления для страницы
 		 *
 		 * @see libs\factory\pages\themplates\FactoryPages000_ImpressiveThemplate
@@ -94,32 +112,30 @@
 
 			$options[] = array(
 				'type' => 'html',
-				'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('JavaScript Options', 'minify-and-combine') . '</strong><p>' . __('', 'minify-and-combine') . '</p></div>'
+				'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('JavaScript Options', 'minify-and-combine') . '</strong><p></p></div>'
 			);
 
-			
 			$options[] = array(
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'js_optimize',
-				'title' => __('Optimize JavaScript Code?', 'clearfy'),
+				'title' => __('Optimize JavaScript Code?', 'minify-and-combine'),
 				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				//'hint' => __('Optimize JavaScript Code.', 'minify-and-combine'),
 				'default' => false,
 				'eventsOn' => array(
-					'show' => '#wbcr-clr-optimize-js-fields'
+					'show' => '#wbcr-mac-optimize-js-fields'
 				),
 				'eventsOff' => array(
-					'hide' => '#wbcr-clr-optimize-js-fields'
+					'hide' => '#wbcr-mac-optimize-js-fields'
 				)
 			);
-
 
 			$js_options[] = array(
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'js_aggregate',
-				'title' => __('Aggregate JS-files?', 'clearfy'),
+				'title' => __('Aggregate JS-files?', 'minify-and-combine'),
 				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('Aggregate all linked JS-files to have them loaded non-render blocking? If this option is off, the individual JS-files will remain in place but will be minified.', 'minify-and-combine'),
 				'default' => false
@@ -129,7 +145,7 @@
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'js_include_inline',
-				'title' => __('Also aggregate inline JS?', 'clearfy'),
+				'title' => __('Also aggregate inline JS?', 'minify-and-combine'),
 				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('Let Мinify And Combine also extract JS from the HTML. Warning: this can make Мinify And Combine\'s cache size grow quickly, so only enable this if you know what you\'re doing.', 'minify-and-combine'),
 				'default' => false
@@ -139,7 +155,7 @@
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'js_forcehead',
-				'title' => __('Force JavaScript in &lt;head&gt;?', 'clearfy'),
+				'title' => __('Force JavaScript in &lt;head&gt;?', 'minify-and-combine'),
 				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('Load JavaScript early, this can potentially fix some JS-errors, but makes the JS render blocking.', 'minify-and-combine'),
 				'default' => false
@@ -148,7 +164,7 @@
 			$js_options[] = array(
 				'type' => 'textarea',
 				'name' => 'js_exclude',
-				'title' => __('Exclude scripts from Мinify And Combine:', 'clearfy'),
+				'title' => __('Exclude scripts from Мinify And Combine:', 'minify-and-combine'),
 				//'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('A comma-separated list of scripts you want to exclude from being optimized, for example \'whatever.js, another.js\' (without the quotes) to exclude those scripts from being aggregated and minimized by Мinify And Combine.', 'minify-and-combine'),
 				'default' => 'seal.js, js/jquery/jquery.js'
@@ -158,7 +174,7 @@
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'js_trycatch',
-				'title' => __('Add try-catch wrapping?', 'clearfy'),
+				'title' => __('Add try-catch wrapping?', 'minify-and-combine'),
 				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('If your scripts break because of a JS-error, you might want to try this.', 'minify-and-combine'),
 				'default' => false
@@ -166,20 +182,20 @@
 
 			$options[] = array(
 				'type' => 'div',
-				'id' => 'wbcr-clr-optimize-js-fields',
+				'id' => 'wbcr-mac-optimize-js-fields',
 				'items' => $js_options
 			);
 
 			$options[] = array(
 				'type' => 'html',
-				'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('CSS Options', 'minify-and-combine') . '</strong><p>' . __('', 'minify-and-combine') . '</p></div>'
+				'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('CSS Options', 'minify-and-combine') . '</strong><p></p></div>'
 			);
 
 			$options[] = array(
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'css_optimize',
-				'title' => __('Optimize CSS Code?', 'clearfy'),
+				'title' => __('Optimize CSS Code?', 'minify-and-combine'),
 				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('If your scripts break because of a JS-error, you might want to try this.', 'minify-and-combine'),
 				'default' => false,
@@ -195,7 +211,7 @@
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'css_aggregate',
-				'title' => __('Aggregate CSS-files?', 'clearfy'),
+				'title' => __('Aggregate CSS-files?', 'minify-and-combine'),
 				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('Aggregate all linked CSS-files? If this option is off, the individual CSS-files will remain in place but will be minified.', 'minify-and-combine'),
 				'default' => false
@@ -205,7 +221,7 @@
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'css_include_inline',
-				'title' => __('Also aggregate inline CSS?', 'clearfy'),
+				'title' => __('Also aggregate inline CSS?', 'minify-and-combine'),
 				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('Check this option for Мinify And Combine to also aggregate CSS in the HTML.', 'minify-and-combine'),
 				'default' => false
@@ -215,7 +231,7 @@
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'css_datauris',
-				'title' => __('Generate data: URIs for images?', 'clearfy'),
+				'title' => __('Generate data: URIs for images?', 'minify-and-combine'),
 				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('Enable this to include small background-images in the CSS itself instead of as separate downloads.', 'minify-and-combine'),
 				'default' => false
@@ -225,7 +241,7 @@
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'css_defer',
-				'title' => __('Inline and Defer CSS?', 'clearfy'),
+				'title' => __('Inline and Defer CSS?', 'minify-and-combine'),
 				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('Inline "above the fold CSS" while loading the main auto optimized CSS only after page load. Check the FAQ for more info.
 This can be fully automated for different types of pages with the Мinify And Combine CriticalCSS Power-Up.', 'minify-and-combine'),
@@ -236,7 +252,7 @@ This can be fully automated for different types of pages with the Мinify And Co
 				'type' => 'checkbox',
 				'way' => 'buttons',
 				'name' => 'css_inline',
-				'title' => __('Inline all CSS?', 'clearfy'),
+				'title' => __('Inline all CSS?', 'minify-and-combine'),
 				'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('Inlining all CSS can improve performance for sites with a low pageviews/ visitor-rate, but may slow down performance otherwise.', 'minify-and-combine'),
 				'default' => false
@@ -245,7 +261,7 @@ This can be fully automated for different types of pages with the Мinify And Co
 			$css_options[] = array(
 				'type' => 'textarea',
 				'name' => 'css_exclude',
-				'title' => __('Exclude CSS from Мinify And Combine:', 'clearfy'),
+				'title' => __('Exclude CSS from Мinify And Combine:', 'minify-and-combine'),
 				//'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
 				'hint' => __('A comma-separated list of CSS you want to exclude from being optimized.', 'minify-and-combine'),
 				'default' => 'wp-content/cache/, wp-content/uploads/, admin-bar.min.css, dashicons.min.css'

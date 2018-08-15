@@ -38,7 +38,7 @@
 
 		$args = array(
 			'id' => 'clear-cache-btn',
-			'title' => __('Clear cache', 'minify-and-combibe') . ( is_network_admin() ? '' : ' (' . WMAC_PluginCache::getUsedCache()['percent'] . '%)' ),
+			'title' => __('Clear cache', 'minify-and-combine') . ( is_network_admin() ? '' : ' (' . WMAC_PluginCache::getUsedCache()['percent'] . '%)' ),
 			'href' => $current_url
 		);
 		$wp_admin_bar->add_menu($args);
@@ -52,7 +52,7 @@
 		$current_url = wp_nonce_url(add_query_arg(array('wbcr_mac_clear_cache' => 1)), 'clear_all_cache');
 
 		$menu_items['mac-clear-cache'] = array(
-			'title' => __('Clear cache', 'minify-and-combibe') . ( is_network_admin() ? '' : ' (' . WMAC_PluginCache::getUsedCache()['percent'] . '%)' ),
+			'title' => __('Clear cache', 'minify-and-combine') . ( is_network_admin() ? '' : ' (' . WMAC_PluginCache::getUsedCache()['percent'] . '%)' ),
 			'href' => $current_url
 		);
 

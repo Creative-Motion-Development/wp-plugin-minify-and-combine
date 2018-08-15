@@ -100,7 +100,7 @@
 			protected function setTextDomain()
 			{
 				// Localization plugin
-				load_plugin_textdomain('minify-and-combibe', false, dirname(WMAC_PLUGIN_BASE) . '/languages/');
+				load_plugin_textdomain('minify-and-combine', false, dirname(WMAC_PLUGIN_BASE) . '/languages/');
 			}
 
 			/**
