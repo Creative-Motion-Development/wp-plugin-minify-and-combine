@@ -414,7 +414,7 @@ class JSMin {
                             // don't prepend a newline if two comments right after one another
                             $this->keptComment = "\n";
                         }
-                        $this->keptComment .= "/*!" . substr($comment, 1) . "*/\n";
+                        //$this->keptComment .= "/*!" . substr($comment, 1) . "*/\n";
                     } else if (preg_match('/^@(?:cc_on|if|elif|else|end)\\b/', $comment)) {
                         // IE conditional
                         $this->keptComment .= "/*{$comment}*/";

@@ -42,6 +42,7 @@ class WMAC_PluginCSSmin
      */
     public function run( $css )
     {
+	    $this->minifier->removeImportantComments();
         $result = $this->minifier->run( $css );
 
         return $result;
