@@ -1,4 +1,5 @@
 <?php
+
 	/**
 	 * JSMin.php - modified PHP implementation of Douglas Crockford's JSMin.
 	 *
@@ -469,4 +470,3 @@
 	class JSMin_UnterminatedRegExpException extends \Exception {
 
 	}
-
