@@ -6,19 +6,26 @@
 	 * @version 1.0
 	 */
 
+	// Exit if accessed directly
+	if( !defined('ABSPATH') ) {
+		exit;
+	}
+
 	function wbcr_mac_clear_cache()
 	{
 		if( isset($_GET['wbcr_mac_clear_cache']) && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'clear_all_cache') ) {
-			$page = isset( $_GET[ 'page' ] ) ? $_GET[ 'page' ] : 'minify_and_combine-wbcr_minify_and_combine';
+			$page = isset($_GET['page'])
+				? $_GET['page']
+				: 'minify_and_combine-wbcr_minify_and_combine';
 			if( is_network_admin() ) {
 				WMAC_PluginCache::clearAllMultisite();
-				$base_url = network_admin_url( 'settings.php' ) . '?page=' . $page;
+				$base_url = network_admin_url('settings.php') . '?page=' . $page;
 			} else {
 				WMAC_PluginCache::clearAll();
-				$base_url = admin_url( 'options-general.php' ) . '?page=' . $page;
+				$base_url = admin_url('options-general.php') . '?page=' . $page;
 			}
 
-			wp_safe_redirect( add_query_arg( array( 'wbcr_mac_clear_cache_success' => 1 ), $base_url ) );
+			wp_safe_redirect(add_query_arg(array('wbcr_mac_clear_cache_success' => 1), $base_url));
 		}
 	}
 
@@ -38,7 +45,9 @@
 
 		$args = array(
 			'id' => 'clear-cache-btn',
-			'title' => __('Clear cache', 'minify-and-combine') . ( is_network_admin() ? '' : ' (' . WMAC_PluginCache::getUsedCache()['percent'] . '%)' ),
+			'title' => __('Clear cache', 'minify-and-combine') . (is_network_admin()
+					? ''
+					: ' (' . WMAC_PluginCache::getUsedCache()['percent'] . '%)'),
 			'href' => $current_url
 		);
 		$wp_admin_bar->add_menu($args);
@@ -52,7 +61,9 @@
 		$current_url = wp_nonce_url(add_query_arg(array('wbcr_mac_clear_cache' => 1)), 'clear_all_cache');
 
 		$menu_items['mac-clear-cache'] = array(
-			'title' => __('Clear cache', 'minify-and-combine') . ( is_network_admin() ? '' : ' (' . WMAC_PluginCache::getUsedCache()['percent'] . '%)' ),
+			'title' => __('Clear cache', 'minify-and-combine') . (is_network_admin()
+					? ''
+					: ' (' . WMAC_PluginCache::getUsedCache()['percent'] . '%)'),
 			'href' => $current_url
 		);
 

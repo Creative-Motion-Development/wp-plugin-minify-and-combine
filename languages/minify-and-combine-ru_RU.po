@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: clearfy\n"
-"POT-Creation-Date: 2018-08-15 04:49+0300\n"
-"PO-Revision-Date: 2018-08-15 05:06+0300\n"
+"POT-Creation-Date: 2018-08-19 03:48+0300\n"
+"PO-Revision-Date: 2018-08-19 03:54+0300\n"
 "Last-Translator: alex.kovalevv@gmail.com <alex.kovalevv@gmail.com>\n"
 "Language-Team: Alex Kovalev <alex.kovalevv@gmail.com>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 2.1.1\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
@@ -18,63 +18,73 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: libs\n"
 
-#: admin/boot.php:21 admin/pages/settings.php:122
+#: admin/boot.php:23
+msgid ""
+"Clearfy: Minify and Combine component is not compatible with the Autoptimize "
+"plugin, please do not use them together to avoid conflicts. Please disable "
+"the Minify and Combine component"
+msgstr ""
+"Clearfy: Компонент Сжатие и Объединение (JS,CSS) не совместим с плагином "
+"Autoptimize, пожалуйста, не используйте их вместе, чтобы избежать "
+"конфликтов. Отключите компонент Сжатие и Объединение (JS,CSS)"
+
+#: admin/boot.php:50 admin/pages/settings.php:122
 msgid "Optimize JavaScript Code?"
 msgstr "Оптимизировать код JavaScript?"
 
-#: admin/boot.php:26 admin/pages/settings.php:138
+#: admin/boot.php:55 admin/pages/settings.php:138
 msgid "Aggregate JS-files?"
 msgstr "Объединять JS-файлы"
 
-#: admin/boot.php:31 admin/pages/settings.php:148
+#: admin/boot.php:60 admin/pages/settings.php:148
 msgid "Also aggregate inline JS?"
 msgstr "Также объединять встроенный JS?"
 
-#: admin/boot.php:36 admin/pages/settings.php:158
+#: admin/boot.php:65 admin/pages/settings.php:158
 msgid "Force JavaScript in &lt;head&gt;?"
 msgstr "Принудительно переместить JS в &lt;head&gt;?"
 
-#: admin/boot.php:41 admin/pages/settings.php:167
+#: admin/boot.php:70 admin/pages/settings.php:167
 msgid "Exclude scripts from Мinify And Combine:"
 msgstr "Исключить скрипты:"
 
-#: admin/boot.php:46 admin/pages/settings.php:177
+#: admin/boot.php:75 admin/pages/settings.php:177
 msgid "Add try-catch wrapping?"
 msgstr "Добавить обертку try-catch?"
 
-#: admin/boot.php:54 admin/pages/settings.php:198
+#: admin/boot.php:83 admin/pages/settings.php:198
 msgid "Optimize CSS Code?"
 msgstr "Оптимизировать CSS код?"
 
-#: admin/boot.php:60 admin/pages/settings.php:214
+#: admin/boot.php:89 admin/pages/settings.php:214
 msgid "Aggregate CSS-files?"
 msgstr "Объединять CSS файлы?"
 
-#: admin/boot.php:66 admin/pages/settings.php:224
+#: admin/boot.php:95 admin/pages/settings.php:224
 msgid "Also aggregate inline CSS?"
 msgstr "Извлекать встроенный CSS код для объединения?"
 
-#: admin/boot.php:72 admin/pages/settings.php:234
+#: admin/boot.php:101 admin/pages/settings.php:234
 msgid "Generate data: URIs for images?"
 msgstr "Преобразовать изображения в CSS код?"
 
-#: admin/boot.php:78 admin/pages/settings.php:244
+#: admin/boot.php:107 admin/pages/settings.php:244
 msgid "Inline and Defer CSS?"
-msgstr ""
+msgstr "Встроить и отложить выполнение CSS?"
 
-#: admin/boot.php:84 admin/pages/settings.php:255
+#: admin/boot.php:113 admin/pages/settings.php:255
 msgid "Inline all CSS?"
 msgstr "Поместить весь CSS код в теле страницы?"
 
-#: admin/boot.php:90
+#: admin/boot.php:119
 msgid "Exclude CSS from Мinify And Combine"
 msgstr "Исключить CSS файлы"
 
-#: admin/boot.php:108
+#: admin/boot.php:135
 msgid "One click optimize scripts (js, css)"
 msgstr "Оптимизировать скрипты (js, css) одним нажатием"
 
-#: admin/boot.php:110
+#: admin/boot.php:137
 msgid "One click optimize html code and scripts"
 msgstr "Оптимизировать Html код и скрипты одним нажатием"
 
@@ -195,7 +205,7 @@ msgstr ""
 msgid "Описание раздела оптимизация"
 msgstr ""
 
-#: admin/pages/settings.php:351 includes/boot.php:41 includes/boot.php:55
+#: admin/pages/settings.php:351 includes/boot.php:48 includes/boot.php:64
 msgid "Clear cache"
 msgstr ""
 
@@ -218,7 +228,7 @@ msgid ""
 "to see how you can keep the cache size under control."
 msgstr ""
 
-#: includes/classes/class.mac-main.php:426
+#: includes/classes/class.mac-main.php:417
 #, php-format
 msgid ""
 "Мinify And Combine cannot write to the cache directory (%s), please fix to "

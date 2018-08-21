@@ -11,11 +11,40 @@
 		exit;
 	}
 
-	function wbcr_mac_group_options($options)
-	{
+	/**
+	 * Печатает ошибки совместимости с похожими плагинами
+	 */
+	add_action('wbcr_factory_notices_000_list', function ($notices, $plugin_name) {
+		if( $plugin_name != WMAC_Plugin::app()->getPluginName() ) {
+			return $notices;
+		}
+
+		if( is_plugin_active('autoptimize/autoptimize.php') ) {
+			$notice_text = __('Clearfy: Minify and Combine component is not compatible with the Autoptimize plugin, please do not use them together to avoid conflicts. Please disable the Minify and Combine component', 'minify-and-combine');
+
+			if( class_exists('WCL_Plugin') ) {
+				$component_button = WCL_Plugin::app()->getInstallComponentsButton('internal', 'minify_and_combine');
+				$notice_text .= ' ' . $component_button->getLink();
+			}
+
+			$notices[] = array(
+				'id' => 'mac_plugin_compatibility',
+				'type' => 'error',
+				'classes' => array('wbcr-hide-after-action'),
+				'dismissible' => false,
+				'dismiss_expires' => 0,
+				'text' => '<p>' . $notice_text . '</p>'
+			);
+		}
+
+		return $notices;
+	}, 10, 2);
+
+	add_filter("wbcr_clearfy_group_options", function ($options) {
 		/**
 		 * Js optimize
 		 */
+
 		$options[] = array(
 			'name' => 'js_optimize',
 			'title' => __('Optimize JavaScript Code?', 'minify-and-combine'),
@@ -92,9 +121,7 @@
 		);
 
 		return $options;
-	}
-
-	add_filter("wbcr_clearfy_group_options", 'wbcr_mac_group_options');
+	});
 
 	/**
 	 * Adds a new mode to the Quick Setup page
@@ -102,8 +129,8 @@
 	 * @param array $mods
 	 * @return mixed
 	 */
-	function wbcr_mac_allow_quick_mods($mods)
-	{
+
+	add_filter("wbcr_clearfy_allow_quick_mods", function ($mods) {
 		if( !defined('WHTM_PLUGIN_ACTIVE') ) {
 			$title = __('One click optimize scripts (js, css)', 'minify-and-combine');
 		} else {
@@ -116,6 +143,4 @@
 		);
 
 		return $mod + $mods;
-	}
-
-	add_filter("wbcr_clearfy_allow_quick_mods", 'wbcr_mac_allow_quick_mods');
+	});

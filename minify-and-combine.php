@@ -4,7 +4,7 @@
 	 * Plugin URI: https://clearfy.pro/minify-and-combine/
 	 * Description: Optimizes your website, concatenating the CSS and JavaScript code, and compressing it.
 	 * Author: Webcraftic <wordpress.webraftic@gmail.com>
-	 * Version: 1.0.0
+	 * Version: 1.0.1
 	 * Text Domain: minify-and-combine
 	 * Domain Path: /languages/
 	 * Author URI: https://clearfy.pro
@@ -128,7 +128,7 @@
 				'prefix' => 'wbcr_mac_', // префикс для базы данных и полей формы
 				'plugin_name' => 'wbcr_minify_and_combine', // имя плагина, как уникальный идентификатор
 				'plugin_title' => __('Webcraftic minify and combine', 'minify-and-combine'), // заголовок плагина
-				'plugin_version' => '1.0.0', // текущая версия плагина
+				'plugin_version' => '1.0.1', // текущая версия плагина
 				'required_php_version' => '5.2', // минимальная версия php для работы плагина
 				'required_wp_version' => '4.2', // минимальная версия wp для работы плагина
 				'plugin_build' => BUILD_TYPE, // сборка плагина
