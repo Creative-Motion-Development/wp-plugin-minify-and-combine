@@ -94,13 +94,21 @@
 				return self::$app;
 			}
 
-			/**
-			 * Устанавливаем текстовый домен
-			 */
+			// todo: перенести этот медот в фреймворк
 			protected function setTextDomain()
 			{
 				// Localization plugin
-				load_plugin_textdomain('minify-and-combine', false, dirname(WMAC_PLUGIN_BASE) . '/languages/');
+				//load_plugin_textdomain('minify-and-combine', false, dirname(WCL_PLUGIN_BASE) . '/languages/');
+
+				$domain = 'minify-and-combine';
+				$locale = apply_filters('plugin_locale', is_admin()
+					? get_user_locale()
+					: get_locale(), $domain);
+				$mofile = $domain . '-' . $locale . '.mo';
+
+				if( !load_textdomain($domain, WMAC_PLUGIN_DIR . '/languages/' . $mofile) ) {
+					load_muplugin_textdomain($domain);
+				}
 			}
 
 			/**
