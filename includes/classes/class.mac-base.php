@@ -612,11 +612,13 @@ abstract class WMAC_PluginBase
 
         // Bail if it looks like its already minifed (by having -min or .min
         // in filename) or if it looks like WP jquery.js (which is minified).
-        $minified_variants = array(
+        $minified_variants = apply_filters('wmac_minified_variants',array(
             '-min.' . $type,
             '.min.' . $type,
             'js/jquery/jquery.js',
-        );
+        ));
+
+
         foreach ( $minified_variants as $ending ) {
             if ( $this->strEndsIn( $filepath, $ending ) ) {
                 return false;

@@ -61,7 +61,7 @@
 		$current_url = wp_nonce_url(add_query_arg(array('wbcr_mac_clear_cache' => 1)), 'clear_all_cache');
 
 		$menu_items['mac-clear-cache'] = array(
-			'title' => __('Clear cache', 'minify-and-combine') . (is_network_admin()
+			'title' => '<span class="dashicons dashicons-image-rotate"></span> ' . __('Clear cache', 'minify-and-combine') . (is_network_admin()
 					? ''
 					: ' (' . WMAC_PluginCache::getUsedCache()['percent'] . '%)'),
 			'href' => $current_url
