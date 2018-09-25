@@ -42,12 +42,15 @@
 			return;
 		}
 		$current_url = wp_nonce_url(add_query_arg(array('wbcr_mac_clear_cache' => 1)), 'clear_all_cache');
+		$percent = '';
+		if ( ! is_network_admin() ) {
+			$get_used_cache = WMAC_PluginCache::getUsedCache();
+			$percent = ' (' . $get_used_cache['percent'] . '%)';
+		}
 
 		$args = array(
 			'id' => 'clear-cache-btn',
-			'title' => __('Clear cache', 'minify-and-combine') . (is_network_admin()
-					? ''
-					: ' (' . WMAC_PluginCache::getUsedCache()['percent'] . '%)'),
+			'title' => __('Clear cache', 'minify-and-combine') . $percent,
 			'href' => $current_url
 		);
 		$wp_admin_bar->add_menu($args);
@@ -59,11 +62,14 @@
 	function wbcr_mac_clearfy_admin_bar_menu($menu_items)
 	{
 		$current_url = wp_nonce_url(add_query_arg(array('wbcr_mac_clear_cache' => 1)), 'clear_all_cache');
+		$percent = '';
+		if ( ! is_network_admin() ) {
+			$get_used_cache = WMAC_PluginCache::getUsedCache();
+			$percent = ' (' . $get_used_cache['percent'] . '%)';
+		}
 
 		$menu_items['mac-clear-cache'] = array(
-			'title' => '<span class="dashicons dashicons-image-rotate"></span> ' . __('Clear cache', 'minify-and-combine') . (is_network_admin()
-					? ''
-					: ' (' . WMAC_PluginCache::getUsedCache()['percent'] . '%)'),
+			'title' => '<span class="dashicons dashicons-image-rotate"></span> ' . __('Clear cache', 'minify-and-combine') . $percent,
 			'href' => $current_url
 		);
 

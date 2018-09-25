@@ -82,7 +82,7 @@
 		/**
 		 * Регистрируем уведомления для страницы
 		 *
-		 * @see libs\factory\pages\themplates\FactoryPages000_ImpressiveThemplate
+		 * @see libs\factory\pages\templates\FactoryPages000_ImpressiveThemplate
 		 * @param $notices
 		 * @return array
 		 */

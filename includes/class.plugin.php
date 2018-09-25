@@ -63,7 +63,9 @@
 				} else {
 					// Если плагин самостоятельный, то записываем в app сслыку на текущий класс
 					self::$app = $this;
+				}
 
+				if( !$this->as_addon ) {
 					parent::__construct($plugin_path, $data);
 				}
 

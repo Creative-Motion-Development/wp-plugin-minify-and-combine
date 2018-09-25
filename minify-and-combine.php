@@ -26,12 +26,12 @@
 	/**
 	 * Troubleshoot old versions of PHP on the client server
 	 */
-	if( version_compare(PHP_VERSION, '5.4.0', '<') ) {
+	if( version_compare(PHP_VERSION, '5.3.0', '<') ) {
 		function wbcr_mac_admin_notice_php_error()
 		{
 			?>
 			<div class="notice notice-error">
-				<p><?php _e('The job of the component "Minify and Combine" component has been suspended! You are using the old version of PHP. Please update the PHP version to 5.4 or later to continue to use this component!', 'minify-and-combine'); ?></p>
+				<p><?php _e('The job of the component "Minify and Combine" component has been suspended! You are using the old version of PHP. Please update the PHP version to 5.3 or later to continue to use this component!', 'minify-and-combine'); ?></p>
 			</div>
 		<?php
 		}
@@ -129,7 +129,7 @@
 				'plugin_name' => 'wbcr_minify_and_combine', // имя плагина, как уникальный идентификатор
 				'plugin_title' => __('Webcraftic minify and combine', 'minify-and-combine'), // заголовок плагина
 				'plugin_version' => '1.0.1', // текущая версия плагина
-				'required_php_version' => '5.2', // минимальная версия php для работы плагина
+				'required_php_version' => '5.3', // минимальная версия php для работы плагина
 				'required_wp_version' => '4.2', // минимальная версия wp для работы плагина
 				'plugin_build' => BUILD_TYPE, // сборка плагина
 				//'updates' => WMAC_PLUGIN_DIR . '/updates/' в этой папке хранятся миграции для разных версий плагина
