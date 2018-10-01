@@ -23,116 +23,107 @@
 		exit;
 	}
 
-	/**
-	 * Troubleshoot old versions of PHP on the client server
-	 */
-	if( version_compare(PHP_VERSION, '5.4.0', '<') ) {
-		function wbcr_mac_admin_notice_php_error()
-		{
-			?>
-			<div class="notice notice-error">
-				<p><?php _e('The job of the component "Minify and Combine" component has been suspended! You are using the old version of PHP. Please update the PHP version to 5.4 or later to continue to use this component!', 'minify-and-combine'); ?></p>
-			</div>
-		<?php
-		}
+	define('WMAC_PLUGIN_VERSION', '1.0.1');
 
-		add_action('admin_notices', 'wbcr_mac_admin_notice_php_error');
+	// Директория плагина
+	define('WMAC_PLUGIN_DIR', dirname(__FILE__));
+
+	// Относительный путь к плагину
+	define('WMAC_PLUGIN_BASE', plugin_basename(__FILE__));
+
+	// Ссылка к директории плагина
+	define('WMAC_PLUGIN_URL', plugins_url(null, __FILE__));
+
+	#comp remove
+	// Эта часть кода для компилятора, не требует редактирования
+	// the following constants are used to debug features of diffrent builds
+	// on developer machines before compiling the plugin
+
+	// Сборка плагина
+	// build: free, premium, ultimate
+	if( !defined('BUILD_TYPE') ) {
+		define('BUILD_TYPE', 'free');
+	}
+	// Языки уже не используются, нужно для работы компилятора
+	// language: en_US, ru_RU
+	if( !defined('LANG_TYPE') ) {
+		define('LANG_TYPE', 'en_EN');
+	}
+
+	// Тип лицензии
+	// license: free, paid
+	if( !defined('LICENSE_TYPE') ) {
+		define('LICENSE_TYPE', 'free');
+	}
+
+	// wordpress language
+	if( !defined('WPLANG') ) {
+		define('WPLANG', LANG_TYPE);
+	}
+	// the compiler library provides a set of functions like onp_build and onp_license
+	// to check how the plugin work for diffrent builds on developer machines
+
+	if( !defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ) {
+		require('libs/onepress/compiler/boot.php');
+		// creating a plugin via the factory
+	}
+	// #fix compiller bug new Factory000_Plugin
+	#endcomp
+
+	if( !defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ) {
+		require_once(WMAC_PLUGIN_DIR . '/libs/factory/core/includes/check-compatibility.php');
+		require_once(WMAC_PLUGIN_DIR . '/libs/factory/clearfy/includes/check-clearfy-compatibility.php');
+	}
+
+	$plugin_info = array(
+		'prefix' => 'wbcr_mac_', // префикс для базы данных и полей формы
+		'plugin_name' => 'wbcr_minify_and_combine', // имя плагина, как уникальный идентификатор
+		'plugin_title' => __('Webcraftic minify and combine', 'minify-and-combine'), // заголовок плагина
+		'plugin_version' => WMAC_PLUGIN_VERSION, // текущая версия плагина
+		'plugin_build' => BUILD_TYPE, // сборка плагина
+		//'updates' => WMAC_PLUGIN_DIR . '/updates/' в этой папке хранятся миграции для разных версий плагина
+	);
+	
+	/**
+	 * Проверяет совместимость с Wordpress, php и другими плагинами.
+	 */
+	$compatibility = new Wbcr_FactoryClearfy000_Compatibility(array_merge($plugin_info, array(
+		'plugin_already_activate' => defined('WMAC_PLUGIN_ACTIVE'),
+		'plugin_as_component' => defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON'),
+		'plugin_dir' => WMAC_PLUGIN_DIR,
+		'plugin_base' => WMAC_PLUGIN_BASE,
+		'plugin_url' => WMAC_PLUGIN_URL,
+		'required_php_version' => '5.4',
+		'required_wp_version' => '4.2.0',
+		'required_clearfy_check_component' => true
+	)));
+
+	/**
+	 * Если плагин совместим, то он продолжит свою работу, иначе будет остановлен,
+	 * а пользователь получит предупреждение.
+	 */
+	if( !$compatibility->check() ) {
 		return;
 	}
 
+	// Устанавливаем контстанту, что плагин уже используется
+	define('WMAC_PLUGIN_ACTIVE', true);
 
-	/**
-	* Notification that this plugin is already used as part of the Clearfy plugin as its component.
-	* We block the work of this plugin, so as not to cause conflict.
-	*/
-	if( defined('WMAC_PLUGIN_ACTIVE') || (defined('WMAC_PLUGIN_ACTIVE') && !defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON')) ) {
-		function wbcr_mac_admin_notice_error()
-		{
-			?>
-			<div class="notice notice-error">
-				<p><?php _e('We found that you have the "Clearfy - wordpress optimization plugin" plugin installed, this plugin already has "Minify and combine" functions, so you can deactivate plugin "Minify and combine"!'); ?></p>
-			</div>
-		<?php
-		}
+	// Этот плагин может быть аддоном плагина Clearfy, если он загружен, как аддон, то мы не подключаем фреймворк,
+	// а наследуем функции фреймворка от плагина Clearfy. Если плагин скомпилирован, как отдельный плагин, то он использует собственный фреймворк для работы.
+	// Константа LOADING_MINIFY_AND_COMBINE_AS_ADDON утсанавливается в классе libs/factory/core/includes/Wbcr_Factory000_Plugin
 
-		add_action('admin_notices', 'wbcr_mac_admin_notice_error');
+	if( !defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ) {
+		// Фреймворк - отвечает за интерфейс, содержит общие функции для серии плагинов и готовые шаблоны для быстрого развертывания плагина.
+		require_once(WMAC_PLUGIN_DIR . '/libs/factory/core/boot.php');
+	}
 
-		return;
-	} else {
+	// Основной класс плагина
+	require_once(WMAC_PLUGIN_DIR . '/includes/class.plugin.php');
 
-		// Устанавливаем контстанту, что плагин уже используется
-		define('WMAC_PLUGIN_ACTIVE', true);
+	// Класс WMAC_Plugin создается только, если этот плагин работает, как самостоятельный плагин.
+	// Если плагин работает, как аддон, то класс создается родительским плагином.
 
-		// Директория плагина
-		define('WMAC_PLUGIN_DIR', dirname(__FILE__));
-
-		// Относительный путь к плагину
-		define('WMAC_PLUGIN_BASE', plugin_basename(__FILE__));
-
-		// Ссылка к директории плагина
-		define('WMAC_PLUGIN_URL', plugins_url(null, __FILE__));
-
-		#comp remove
-		// Эта часть кода для компилятора, не требует редактирования
-		// the following constants are used to debug features of diffrent builds
-		// on developer machines before compiling the plugin
-
-		// Сборка плагина
-		// build: free, premium, ultimate
-		if( !defined('BUILD_TYPE') ) {
-			define('BUILD_TYPE', 'free');
-		}
-		// Языки уже не используются, нужно для работы компилятора
-		// language: en_US, ru_RU
-		if( !defined('LANG_TYPE') ) {
-			define('LANG_TYPE', 'en_EN');
-		}
-
-		// Тип лицензии
-		// license: free, paid
-		if( !defined('LICENSE_TYPE') ) {
-			define('LICENSE_TYPE', 'free');
-		}
-
-		// wordpress language
-		if( !defined('WPLANG') ) {
-			define('WPLANG', LANG_TYPE);
-		}
-		// the compiler library provides a set of functions like onp_build and onp_license
-		// to check how the plugin work for diffrent builds on developer machines
-
-		if( !defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ) {
-			require('libs/onepress/compiler/boot.php');
-			// creating a plugin via the factory
-		}
-		// #fix compiller bug new Factory000_Plugin
-		#endcomp
-
-		// Этот плагин может быть аддоном плагина Clearfy, если он загружен, как аддон, то мы не подключаем фреймворк,
-		// а наследуем функции фреймворка от плагина Clearfy. Если плагин скомпилирован, как отдельный плагин, то он использует собственный фреймворк для работы.
-		// Константа LOADING_MINIFY_AND_COMBINE_AS_ADDON утсанавливается в классе libs/factory/core/includes/Wbcr_Factory000_Plugin
-
-		if( !defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ) {
-			// Фреймворк - отвечает за интерфейс, содержит общие функции для серии плагинов и готовые шаблоны для быстрого развертывания плагина.
-			require_once(WMAC_PLUGIN_DIR . '/libs/factory/core/boot.php');
-		}
-
-		// Основной класс плагина
-		require_once(WMAC_PLUGIN_DIR . '/includes/class.plugin.php');
-
-		// Класс WMAC_Plugin создается только, если этот плагин работает, как самостоятельный плагин.
-		// Если плагин работает, как аддон, то класс создается родительским плагином.
-
-		if( !defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ) {
-			new WMAC_Plugin(__FILE__, array(
-				'prefix' => 'wbcr_mac_', // префикс для базы данных и полей формы
-				'plugin_name' => 'wbcr_minify_and_combine', // имя плагина, как уникальный идентификатор
-				'plugin_title' => __('Webcraftic minify and combine', 'minify-and-combine'), // заголовок плагина
-				'plugin_version' => '1.0.1', // текущая версия плагина
-				'required_php_version' => '5.2', // минимальная версия php для работы плагина
-				'required_wp_version' => '4.2', // минимальная версия wp для работы плагина
-				'plugin_build' => BUILD_TYPE, // сборка плагина
-				//'updates' => WMAC_PLUGIN_DIR . '/updates/' в этой папке хранятся миграции для разных версий плагина
-			));
-		}
+	if( !defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ) {
+		new WMAC_Plugin(__FILE__, $plugin_info);
 	}
