@@ -14,9 +14,8 @@
 	function wbcr_mac_clear_cache()
 	{
 		if( isset($_GET['wbcr_mac_clear_cache']) && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'clear_all_cache') ) {
-			$page = isset($_GET['page'])
-				? $_GET['page']
-				: 'minify_and_combine-wbcr_minify_and_combine';
+			$page = isset($_GET['page']) ? $_GET['page'] : 'minify_and_combine-' . WMAC_Plugin::app()->getPluginName();
+
 			if( is_network_admin() ) {
 				WMAC_PluginCache::clearAllMultisite();
 				$base_url = network_admin_url('settings.php') . '?page=' . $page;
@@ -43,7 +42,7 @@
 		}
 		$current_url = wp_nonce_url(add_query_arg(array('wbcr_mac_clear_cache' => 1)), 'clear_all_cache');
 		$percent = '';
-		if ( ! is_network_admin() ) {
+		if( !is_network_admin() ) {
 			$get_used_cache = WMAC_PluginCache::getUsedCache();
 			$percent = ' (' . $get_used_cache['percent'] . '%)';
 		}
@@ -63,7 +62,7 @@
 	{
 		$current_url = wp_nonce_url(add_query_arg(array('wbcr_mac_clear_cache' => 1)), 'clear_all_cache');
 		$percent = '';
-		if ( ! is_network_admin() ) {
+		if( !is_network_admin() ) {
 			$get_used_cache = WMAC_PluginCache::getUsedCache();
 			$percent = ' (' . $get_used_cache['percent'] . '%)';
 		}

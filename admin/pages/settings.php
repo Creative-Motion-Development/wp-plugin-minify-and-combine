@@ -25,6 +25,7 @@
 		public $id = "minify_and_combine"; // Уникальный идентификатор страницы
 		public $page_menu_dashicon = 'dashicons-testimonial'; // Иконка для закладки страницы, дашикон
 		public $page_parent_page = "performance"; // Уникальный идентификатор родительской страницы
+		public $available_for_multisite = true; // Добавлять страницу в меню суперадминистратора?
 
 		/**
 		 * @param Wbcr_Factory000_Plugin $plugin
@@ -46,8 +47,6 @@
 				$this->add_link_to_plugin_actions = true;
 
 				$this->page_parent_page = null;
-
-				$this->available_for_multisite = true;
 			}
 
 			parent::__construct($plugin);
@@ -56,9 +55,7 @@
 		// Метод позволяет менять заголовок меню, в зависимости от сборки плагина.
 		public function getMenuTitle()
 		{
-			return defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON')
-				? __('Scripts Minify And Combine', 'minify-and-combine')
-				: __('General', 'minify-and-combine');
+			return defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ? __('Scripts Minify And Combine', 'minify-and-combine') : __('General', 'minify-and-combine');
 		}
 
 		/**
@@ -299,21 +296,15 @@ This can be fully automated for different types of pages with the Мinify And Co
 		{
 			$is_network = is_network_admin();
 
-			$cache = $is_network
-				? WMAC_PluginCache::getUsedCacheMultisite()
-				: WMAC_PluginCache::getUsedCache();
+			$cache = $is_network ? WMAC_PluginCache::getUsedCacheMultisite() : WMAC_PluginCache::getUsedCache();
 			?>
 			<div class="form-group">
 				<label for="wbcr_mac_css_optimize" class="col-sm-6 control-label">
-					Cache folder<?php echo $is_network
-						? 's'
-						: '' ?>
+					Cache folder<?php echo $is_network ? 's' : '' ?>
 				</label>
 
 				<div class="control-group col-sm-6">
-					<?php echo $is_network
-						? WP_CONTENT_DIR . WMAC_CACHE_CHILD_DIR . '[...]/'
-						: WMAC_PluginCache::getCacheDir() ?>
+					<?php echo $is_network ? WP_CONTENT_DIR . WMAC_CACHE_CHILD_DIR . '[...]/' : WMAC_PluginCache::getCacheDir() ?>
 				</div>
 			</div>
 			<div class="form-group">
@@ -327,9 +318,7 @@ This can be fully automated for different types of pages with the Мinify And Co
 			</div>
 			<div class="form-group">
 				<label for="wbcr_mac_css_optimize" class="col-sm-6 control-label">
-					Cached styles and scripts<?php echo $is_network
-						? ' (all sites)'
-						: '' ?>
+					Cached styles and scripts<?php echo $is_network ? ' (all sites)' : '' ?>
 				</label>
 
 				<div class="control-group col-sm-6">
