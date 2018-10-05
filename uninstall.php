@@ -17,37 +17,30 @@
 	 */
 	function uninstall()
 	{
+		// remove plugin options
+		global $wpdb;
+
 		$plugin = new WMAC_PluginMain();
 		$plugin->setup();
 
 		WMAC_PluginCache::clearAll();
 
-		// remove plugin options
-		global $wpdb;
-
-		$wpdb->query("DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE 'wbcr_mac_%';");
+		$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'wbcr_mac_%';");
 	}
 
 	if( is_multisite() ) {
-		global $wp_version;
-		if( version_compare($wp_version, '4.6', '>=') ) {
-			$sites = get_sites($args);
-		} else {
-			$sites = wp_get_sites($args);
-		}
+		global $wpdb, $wp_version;
 
-		foreach($sites as $site) {
-			if( version_compare($wp_version, '4.6', '>=') ) {
-				$blog_id = $site->blog_id;
-			} else {
-				$blog_id = $site['blog_id'];
+		$blogs = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
+		if( !empty($blogs) ) {
+			foreach($blogs as $id) {
+
+				switch_to_blog($id);
+
+				uninstall();
+
+				restore_current_blog();
 			}
-
-			switch_to_blog($blog_id);
-
-			uninstall();
-
-			restore_current_blog();
 		}
 	} else {
 		uninstall();
