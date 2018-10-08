@@ -11,7 +11,7 @@
 		exit;
 	}
 	
-	class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryPages000_ImpressiveThemplate {
+	class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryClearfy000_PageBase {
 		
 		/**
 		 * The id of the page in the admin menu.
@@ -56,24 +56,6 @@
 		public function getMenuTitle()
 		{
 			return defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ? __('Scripts Minify And Combine', 'minify-and-combine') : __('General', 'minify-and-combine');
-		}
-
-		/**
-		 * Requests assets (js and css) for the page.
-		 *
-		 * @see Wbcr_FactoryPages000_AdminPage
-		 *
-		 * @since 1.0.0
-		 * @return void
-		 */
-		public function assets($scripts, $styles)
-		{
-			parent::assets($scripts, $styles);
-
-			// Add Clearfy styles for HMWP pages
-			if( defined('WBCR_CLEARFY_PLUGIN_ACTIVE') ) {
-				$this->styles->add(WCL_PLUGIN_URL . '/admin/assets/css/general.css');
-			}
 		}
 
 		/**
@@ -299,29 +281,29 @@ This can be fully automated for different types of pages with the Мinify And Co
 			$cache = $is_network ? WMAC_PluginCache::getUsedCacheMultisite() : WMAC_PluginCache::getUsedCache();
 			?>
 			<div class="form-group">
-				<label for="wbcr_mac_css_optimize" class="col-sm-6 control-label">
+				<label for="wbcr_mac_css_optimize" class="col-sm-4 control-label">
 					Cache folder<?php echo $is_network ? 's' : '' ?>
 				</label>
 
-				<div class="control-group col-sm-6">
+				<div class="control-group col-sm-8">
 					<?php echo $is_network ? WP_CONTENT_DIR . WMAC_CACHE_CHILD_DIR . '[...]/' : WMAC_PluginCache::getCacheDir() ?>
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="wbcr_mac_css_optimize" class="col-sm-6 control-label">
+				<label for="wbcr_mac_css_optimize" class="col-sm-4 control-label">
 					Can we write?
 				</label>
 
-				<div class="control-group col-sm-6">
+				<div class="control-group col-sm-8">
 					Yes
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="wbcr_mac_css_optimize" class="col-sm-6 control-label">
+				<label for="wbcr_mac_css_optimize" class="col-sm-4 control-label">
 					Cached styles and scripts<?php echo $is_network ? ' (all sites)' : '' ?>
 				</label>
 
-				<div class="control-group col-sm-6">
+				<div class="control-group col-sm-8">
 					<?php if( $is_network ) : ?>
 						<?php echo $cache['files'] ?> files, totalling <?php echo $cache['size'] ?> (calculated
 						at <?php echo gmdate('H:i') ?> UTC)
@@ -332,10 +314,10 @@ This can be fully automated for different types of pages with the Мinify And Co
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="wbcr_mac_css_optimize" class="col-sm-6 control-label">
+				<label for="wbcr_mac_css_optimize" class="col-sm-4 control-label">
 				</label>
 
-				<div class="control-group col-sm-6">
+				<div class="control-group col-sm-8">
 					<a class="btn btn-default" href="<?= wp_nonce_url($this->getActionUrl('clear-cache'), 'clear_cache_' . $this->getResultId()); ?>">
 						<?php _e('Clear cache', 'minify-and-combine') ?>
 					</a>
