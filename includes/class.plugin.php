@@ -67,8 +67,6 @@
 					parent::__construct($plugin_path, $data);
 				}
 
-				self::app()->setTextDomain('minify-and-combine', WMAC_PLUGIN_DIR);
-
 				$this->setModules();
 				$this->globalScripts();
 				
@@ -93,6 +91,33 @@
 			public static function app()
 			{
 				return self::$app;
+			}
+
+
+			/**
+			 * Выполнение действий после загрузки плагина
+			 * Подключаем все классы оптимизации и запускаем процесс
+			 */
+			public function pluginsLoaded()
+			{
+				self::app()->setTextDomain('minify-and-combine', WMAC_PLUGIN_DIR);
+
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-base.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-cache.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-cache-checker.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-scripts.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-css-min.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-styles.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-main.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-helper.php');
+
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/jsmin.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Colors.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Minifier.php');
+				require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Utils.php');
+
+				$plugin = new WMAC_PluginMain();
+				$plugin->start();
 			}
 
 			/**
@@ -146,30 +171,6 @@
 				//require(WMAC_PLUGIN_DIR . '/includes/classes/class.configurate-comments.php');
 				//new WMAC_ConfigComments(self::$app);
 				require_once(WMAC_PLUGIN_DIR . '/includes/boot.php');
-			}
-
-			/**
-			 * Выполнение действий после загрузки плагина
-			 * Подключаем все классы оптимизации и запускаем процесс
-			 */
-			public function pluginsLoaded()
-			{
-				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-base.php');
-				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-cache.php');
-				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-cache-checker.php');
-				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-scripts.php');
-				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-css-min.php');
-				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-styles.php');
-				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-main.php');
-				require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-helper.php');
-
-				require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/jsmin.php');
-				require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Colors.php');
-				require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Minifier.php');
-				require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Utils.php');
-
-				$plugin = new WMAC_PluginMain();
-				$plugin->start();
 			}
 		}
 	}

@@ -25,7 +25,11 @@
 		public $id = "minify_and_combine"; // Уникальный идентификатор страницы
 		public $page_menu_dashicon = 'dashicons-testimonial'; // Иконка для закладки страницы, дашикон
 		public $page_parent_page = "performance"; // Уникальный идентификатор родительской страницы
-		public $available_for_multisite = true; // Добавлять страницу в меню суперадминистратора?
+		/**
+		 * Доступена для мультисайтов
+		 * @var bool
+		 */
+		public $available_for_multisite = true;
 
 		/**
 		 * @param Wbcr_Factory000_Plugin $plugin
