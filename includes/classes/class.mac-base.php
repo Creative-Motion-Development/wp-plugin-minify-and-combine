@@ -411,7 +411,7 @@ abstract class WMAC_PluginBase
                 $filecontent .= ';';
             }
             // Check if try/catch should be used.
-            $opt_js_try_catch = WMAC_Plugin::app()->getOption('js_trycatch');
+            $opt_js_try_catch = WMAC_Plugin::app()->getPopulateOption('js_trycatch');
             if ( $opt_js_try_catch ) {
                 // It should, wrap in try/catch.
                 $filecontent = 'try{' . $filecontent . '}catch(e){}';

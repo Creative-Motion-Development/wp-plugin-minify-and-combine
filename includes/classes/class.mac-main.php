@@ -88,7 +88,7 @@
 		{
 			if( WMAC_PluginCache::cacheAvail() ) {
 
-				if( WMAC_Plugin::app()->getOption('js_optimize') || WMAC_Plugin::app()->getOption('css_optimize')
+				if( WMAC_Plugin::app()->getPopulateOption('js_optimize') || WMAC_Plugin::app()->getPopulateOption('css_optimize')
 				) {
 					// Hook into WordPress frontend.
 					if( defined('WMAC_INIT_EARLIER') ) {
@@ -147,7 +147,7 @@
 					$this->extend();
 				}
 
-				if( WMAC_Plugin::app()->getOption('js_optimize') ) {
+				if( WMAC_Plugin::app()->getPopulateOption('js_optimize') ) {
 					if( !defined('CONCATENATE_SCRIPTS') ) {
 						define('CONCATENATE_SCRIPTS', false);
 					}
@@ -156,7 +156,7 @@
 					}
 				}
 
-				if( WMAC_Plugin::app()->getOption('css_optimize') ) {
+				if( WMAC_Plugin::app()->getPopulateOption('css_optimize') ) {
 					if( !defined('COMPRESS_CSS') ) {
 						define('COMPRESS_CSS', false);
 					}
@@ -296,28 +296,28 @@
 
 			// Determine what needs to be ran.
 			$classes = array();
-			if( WMAC_Plugin::app()->getOption('js_optimize') ) {
+			if( WMAC_Plugin::app()->getPopulateOption('js_optimize') ) {
 				$classes[] = 'WMAC_PluginScripts';
 			}
-			if( WMAC_Plugin::app()->getOption('css_optimize') ) {
+			if( WMAC_Plugin::app()->getPopulateOption('css_optimize') ) {
 				$classes[] = 'WMAC_PluginStyles';
 			}
 
 			$classoptions = array(
 				'WMAC_PluginScripts' => array(
-					'aggregate' => WMAC_Plugin::app()->getOption('js_aggregate'),
-					'forcehead' => WMAC_Plugin::app()->getOption('js_forcehead'),
-					'trycatch' => WMAC_Plugin::app()->getOption('js_trycatch'),
-					'js_exclude' => WMAC_Plugin::app()->getOption('js_exclude'),
-					'include_inline' => WMAC_Plugin::app()->getOption('js_include_inline'),
+					'aggregate' => WMAC_Plugin::app()->getPopulateOption('js_aggregate'),
+					'forcehead' => WMAC_Plugin::app()->getPopulateOption('js_forcehead'),
+					'trycatch' => WMAC_Plugin::app()->getPopulateOption('js_trycatch'),
+					'js_exclude' => WMAC_Plugin::app()->getPopulateOption('js_exclude'),
+					'include_inline' => WMAC_Plugin::app()->getPopulateOption('js_include_inline'),
 				),
 				'WMAC_PluginStyles' => array(
-					'aggregate' => WMAC_Plugin::app()->getOption('css_aggregate'),
-					'datauris' => WMAC_Plugin::app()->getOption('css_datauris'),
-					'defer' => WMAC_Plugin::app()->getOption('css_defer'),
-					'inline' => WMAC_Plugin::app()->getOption('css_inline'),
-					'css_exclude' => WMAC_Plugin::app()->getOption('css_exclude'),
-					'include_inline' => WMAC_Plugin::app()->getOption('css_include_inline'),
+					'aggregate' => WMAC_Plugin::app()->getPopulateOption('css_aggregate'),
+					'datauris' => WMAC_Plugin::app()->getPopulateOption('css_datauris'),
+					'defer' => WMAC_Plugin::app()->getPopulateOption('css_defer'),
+					'inline' => WMAC_Plugin::app()->getPopulateOption('css_inline'),
+					'css_exclude' => WMAC_Plugin::app()->getPopulateOption('css_exclude'),
+					'include_inline' => WMAC_Plugin::app()->getPopulateOption('css_include_inline'),
 				),
 			);
 

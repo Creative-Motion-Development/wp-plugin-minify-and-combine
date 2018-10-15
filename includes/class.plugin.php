@@ -81,9 +81,9 @@
 			 * Статический метод для быстрого доступа к информации о плагине, а также часто использумых методах.
 			 *
 			 * Пример:
-			 * WMAC_Plugin::app()->getOption()
-			 * WMAC_Plugin::app()->updateOption()
-			 * WMAC_Plugin::app()->deleteOption()
+			 * WMAC_Plugin::app()->getPopulateOption()
+			 * WMAC_Plugin::app()->updatePopulateOption()
+			 * WMAC_Plugin::app()->deletePopulateOption()
 			 * WMAC_Plugin::app()->getPluginName()
 			 *
 			 * @return Wbcr_Factory000_Plugin

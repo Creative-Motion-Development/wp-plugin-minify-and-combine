@@ -76,7 +76,7 @@
 	}
 
 	if( defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ) {
-		add_action('wbcr_clearfy_admin_bar_menu_items', 'wbcr_mac_clearfy_admin_bar_menu');
+		add_action('wbcr/clearfy/adminbar_menu_items', 'wbcr_mac_clearfy_admin_bar_menu');
 	} else {
 		add_action('admin_bar_menu', 'wbcr_mac_admin_bar_menu');
 	}
