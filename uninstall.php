@@ -9,12 +9,13 @@
 		define('WMAC_PLUGIN_DIR', dirname(__FILE__));
 	}
 
+	if( !function_exists('is_plugin_active_for_network') ) {
+		require_once(ABSPATH . 'wp-admin/includes/plugin.php');
+	}
+
 	require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-cache.php');
 	require_once(WMAC_PLUGIN_DIR . '/includes/classes/class.mac-main.php');
 
-	/**
-	 * Удаление кеша и опций
-	 */
 	function uninstall()
 	{
 		// remove plugin options
@@ -28,10 +29,13 @@
 		$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'wbcr_mac_%';");
 	}
 
-	if( is_multisite() ) {
+	if( is_multisite() && is_plugin_active_for_network('minify-and-combine/minify-and-combine.php') ) {
 		global $wpdb, $wp_version;
 
+		$wpdb->query("DELETE FROM {$wpdb->sitemeta} WHERE meta_key LIKE 'wbcr_mac_%';");
+
 		$blogs = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
+
 		if( !empty($blogs) ) {
 			foreach($blogs as $id) {
 
