@@ -1092,7 +1092,7 @@ class WMAC_PluginStyles extends WMAC_PluginBase
 	/**
 	 * @return array
 	 */
-    public function getPopulateOptions()
+    public function getOptions()
     {
         return $this->options;
     }
@@ -1120,7 +1120,7 @@ class WMAC_PluginStyles extends WMAC_PluginBase
 	 *
 	 * @return mixed
 	 */
-    public function getPopulateOption( $name )
+    public function getOption( $name )
     {
         return $this->options[$name];
     }
