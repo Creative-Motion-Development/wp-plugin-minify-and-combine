@@ -29,7 +29,7 @@
 		$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'wbcr_mac_%';");
 	}
 
-	if( is_multisite() && is_plugin_active_for_network('minify-and-combine/minify-and-combine.php') ) {
+	if( is_multisite() ) {
 		global $wpdb, $wp_version;
 
 		$wpdb->query("DELETE FROM {$wpdb->sitemeta} WHERE meta_key LIKE 'wbcr_mac_%';");

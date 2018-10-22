@@ -37,7 +37,7 @@
 		public function __construct(Wbcr_Factory000_Plugin $plugin)
 		{
 			// Заголовок страницы
-			$this->menu_title = __('Minify And Combine (JS/CSS)', 'minify-and-combine');
+			$this->menu_title = __('Minify (JS/CSS)', 'minify-and-combine');
 
 			// Если плагин загружен, как самостоятельный, то мы меняем настройки страницы и делаем ее внешней,
 			// а не внутренней страницей родительского плагина. Внешнии страницы добавляются в Wordpress меню "Общие"
@@ -59,7 +59,7 @@
 		// Метод позволяет менять заголовок меню, в зависимости от сборки плагина.
 		public function getMenuTitle()
 		{
-			return defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ? __('Scripts Minify And Combine', 'minify-and-combine') : __('General', 'minify-and-combine');
+			return defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ? __('Minify (Html/JS/CSS)', 'minify-and-combine') : __('General', 'minify-and-combine');
 		}
 
 		/**

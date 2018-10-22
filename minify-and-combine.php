@@ -88,7 +88,7 @@
 	 * Проверяет совместимость с Wordpress, php и другими плагинами.
 	 */
 
-	$compatibility = new Wbcr_FactoryClearfy000_Compatibility(array_merge($plugin_info, array(
+	$compatibility = new Wbcr_FactoryClearfy_Compatibility(array_merge($plugin_info, array(
 		'plugin_already_activate' => defined('WMAC_PLUGIN_ACTIVE'),
 		'plugin_as_component' => defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON'),
 		'plugin_dir' => WMAC_PLUGIN_DIR,
