@@ -8,6 +8,7 @@
 	 * Text Domain: minify-and-combine
 	 * Domain Path: /languages/
 	 * Author URI: https://clearfy.pro
+	 * Framework Version: FACTORY_000_VERSION
 	 */
 
 	/*
