@@ -79,6 +79,15 @@
 			if( !defined('WMAC_HASH') ) {
 				define('WMAC_HASH', wp_hash(WMAC_PluginCache::getCacheUrl()));
 			}
+
+			// Multibyte-capable string replacements are available with a filter.
+			// Also requires 'mbstring' extension.
+			$with_mbstring = apply_filters( 'wbcr/mac/main_use_mbstring', false );
+			if ( $with_mbstring ) {
+				WMAC_PluginHelper::mbstringAvailable( \extensions_loaded( 'mbstring' ) );
+	        } else {
+				WMAC_PluginHelper::mbstringAvailable( false );
+	        }
 		}
 
 		/**

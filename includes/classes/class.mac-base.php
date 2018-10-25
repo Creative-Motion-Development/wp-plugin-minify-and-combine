@@ -368,9 +368,9 @@ abstract class WMAC_PluginBase
         $filehash = null;
 
         // Grab the parts we need.
-        $parts = explode( $matches[1], '|' );
+	    $parts = explode( '|', $matches[1] );
         if ( ! empty( $parts ) ) {
-            $filepath = isset( $parts[0] ) ? $parts[0] : null;
+	        $filepath = isset( $parts[0] ) ? base64_decode($parts[0]) : null;
             $filehash = isset( $parts[1] ) ? $parts[1] : null;
         }
 
