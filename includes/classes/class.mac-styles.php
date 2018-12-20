@@ -234,8 +234,8 @@ class WMAC_PluginStyles extends WMAC_PluginBase
                                     "this.onload=null;this.rel='stylesheet'",
                                     $url
                                 );
-                                // Adapt original <link> element for CSS to be preloaded.
-                                $new_tag = str_replace(
+	                            // Adapt original <link> element for CSS to be preloaded and add <noscript>-version for fallback.
+	                            $new_tag = '<noscript>' . $new_tag . '</noscript>' . str_replace(
                                     array(
                                         "rel='stylesheet'",
                                         'rel="stylesheet"',
@@ -816,29 +816,6 @@ class WMAC_PluginStyles extends WMAC_PluginBase
             if ( $this->defer ) {
                 $preloadCssBlock = '';
                 $noScriptCssBlock = "<noscript id=\"aonoscrcss\">";
-
-                /*$defer_inline_code = $this->defer_inline;
-                if ( ! empty( $defer_inline_code ) ) {
-                    if ( apply_filters( 'wmac_filter_css_critcss_minify', true ) ) {
-                        $iCssHash = md5( $defer_inline_code );
-                        $iCssCache = new WMAC_PluginCache( $iCssHash, 'css' );
-                        if ( $iCssCache->check() ) {
-                            // we have the optimized inline CSS in cache.
-                            $defer_inline_code = $iCssCache->retrieve();
-                        } else {
-                            $cssmin   = new WMAC_PluginCSSmin();
-                            $tmp_code = trim( $cssmin->run( $defer_inline_code ) );
-
-                            if ( ! empty( $tmp_code ) ) {
-                                $defer_inline_code = $tmp_code;
-                                $iCssCache->cache( $defer_inline_code, 'text/css' );
-                                unset( $tmp_code );
-                            }
-                        }
-                    }
-                    $code_out = '<style type="text/css" id="aoatfcss" media="all">' . $defer_inline_code . '</style>';
-                    $this->injectInHtml( $code_out, $replaceTag );
-                }*/
             }
 
             foreach ( $this->url as $media => $url ) {
@@ -849,7 +826,6 @@ class WMAC_PluginStyles extends WMAC_PluginBase
                     $preloadCssBlock .= '<link rel="preload" as="style" media="' . $media . '" href="' . $url . '" onload="' . $preloadOnLoad . '" />';
                     $noScriptCssBlock .= '<link type="text/css" media="' . $media . '" href="' . $url . '" rel="stylesheet" />';
                 } else {
-                    // $this->inject_in_html('<link type="text/css" media="' . $media . '" href="' . $url . '" rel="stylesheet" />', $replaceTag);
                     if ( strlen( $this->csscode[$media] ) > $this->cssinlinesize ) {
                         $this->injectInHtml( '<link type="text/css" media="' . $media . '" href="' . $url . '" rel="stylesheet" />', $replaceTag );
                     } elseif ( strlen( $this->csscode[$media] ) > 0 ) {
@@ -928,6 +904,7 @@ class WMAC_PluginStyles extends WMAC_PluginBase
                      * $newurl = preg_replace( '/https?:/', '', str_replace( ' ', '%20', WMAC_PluginMain::getContentUrl() . str_replace( '//', '/', $dir . '/' . $url ) ) );
                      */
                     $newurl = preg_replace( '/https?:/', '', str_replace( ' ', '%20', WMAC_WP_ROOT_URL . str_replace( '//', '/', $dir . '/' . $url ) ) );
+	                $newurl = apply_filters( 'wbcr/mac/css_fixurl_newurl', $newurl );
 
                     /**
                      * Hash the url + whatever was behind potentially for replacement
