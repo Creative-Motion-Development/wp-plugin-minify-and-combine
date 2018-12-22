@@ -305,7 +305,7 @@ This can be fully automated for different types of pages with the Мinify And Co
 		
 		$options[] = array(
 			'type' => 'html',
-			'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __( 'Cache Info', 'minify-and-combine' ) . '</strong><p>' . __( 'Описание раздела оптимизация', 'minify-and-combine' ) . '</p></div>'
+			'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __( 'Cache Info', 'minify-and-combine' ) . '</strong><p></p></div>'
 		);
 		
 		// Произвольный html код
