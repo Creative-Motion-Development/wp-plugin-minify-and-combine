@@ -14,7 +14,7 @@
 	/**
 	 * Печатает ошибки совместимости с похожими плагинами
 	 */
-	add_action('wbcr_factory_notices_000_list', function ($notices, $plugin_name) {
+	add_action('wbcr/factory/admin_notices', function ($notices, $plugin_name) {
 		if( $plugin_name != WMAC_Plugin::app()->getPluginName() ) {
 			return $notices;
 		}

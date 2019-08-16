@@ -1,6 +1,3 @@
-/**
-  Этот файл нужен для компилятора плагина, его изменять не нужно!
-*/
 {
   "assemblies": {
     "__global__": {
@@ -11,6 +8,7 @@
         "node_modules",
         "Gruntfile.js",
         "git-submodules.sh",
+        "commit-multiple.sh",
         "/admin/assets/css/general.less",
         "/admin/assets/css/tinymce.less",
         "/components/assets-manager/libs",
@@ -98,15 +96,16 @@
     }
   },
   "constants": {
-    "version": "1.0.1",
+    "version": "1.1.0",
+    "api": "http://api.byonepress.com/1.1/",
     "name": [
       {
-        "value": "image-optimizer"
+        "value": "webcraftic-minify-and-combine"
       }
     ],
     "pluginUrl": [
       {
-        "value": ""
+        "value": "https://wordpress.org/plugins/webcraftic-minify-and-combine/"
       }
     ]
   }
