@@ -418,7 +418,7 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 	 * Rewrites/Replaces any ASSETS_REGEX-matching urls in a string.
 	 * Replacements are performed in a `longest-match-replaced-first` way.
 	 *
-	 * @param string $code   CSS code.
+	 * @param string $code CSS code.
 	 *
 	 * @return string
 	 */
@@ -862,7 +862,8 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 				}
 
 				$url = $noQurl;
-				if ( '/' === $url{0} || preg_match( '#^(https?://|ftp://|data:)#i', $url ) ) {
+
+				if ( '/' === $url[0] || preg_match( '#^(https?://|ftp://|data:)#i', $url ) ) {
 					// URL is protocol-relative, host-relative or something we don't touch.
 					continue;
 				} else {
@@ -960,8 +961,8 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 	 * Minifies a single local css file
 	 * and returns its (cached) url.
 	 *
-	 * @param string $filepath     Filepath.
-	 * @param bool   $cache_miss   Optional. Force a cache miss. Default false.
+	 * @param string $filepath   Filepath.
+	 * @param bool   $cache_miss Optional. Force a cache miss. Default false.
 	 *
 	 * @return bool|string Url pointing to the minified css file or false.
 	 */
