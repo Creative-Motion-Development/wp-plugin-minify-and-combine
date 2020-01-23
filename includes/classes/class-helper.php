@@ -19,7 +19,7 @@ class WMAC_PluginHelper {
 	/**
 	 * Returns true when mbstring is available.
 	 *
-	 * @param bool|null $override   Allows overriding the decision.
+	 * @param bool|null $override Allows overriding the decision.
 	 *
 	 * @return bool
 	 */
@@ -41,10 +41,10 @@ class WMAC_PluginHelper {
 	 * Multibyte-capable strpos() if support is available on the server.
 	 * If not, it falls back to using \strpos().
 	 *
-	 * @param string      $haystack   Haystack.
-	 * @param string      $needle     Needle.
-	 * @param int         $offset     Offset.
-	 * @param string|null $encoding   Encoding. Default null.
+	 * @param string      $haystack Haystack.
+	 * @param string      $needle   Needle.
+	 * @param int         $offset   Offset.
+	 * @param string|null $encoding Encoding. Default null.
 	 *
 	 * @return int|false
 	 */
@@ -61,8 +61,8 @@ class WMAC_PluginHelper {
 	 * mbstring is available. Returns the number of bytes
 	 * (instead of characters) as fallback.
 	 *
-	 * @param string      $string     String.
-	 * @param string|null $encoding   Encoding.
+	 * @param string      $string   String.
+	 * @param string|null $encoding Encoding.
 	 *
 	 * @return int Number of charcters or bytes in given $string
 	 *             (characters if/when supported, bytes otherwise).
@@ -81,11 +81,11 @@ class WMAC_PluginHelper {
 	 * Uses mbstring if available, before falling back to regular
 	 * substr_replace() (which works just fine in the majority of cases).
 	 *
-	 * @param string      $string        String.
-	 * @param string      $replacement   Replacement.
-	 * @param int         $start         Start offset.
-	 * @param int|null    $length        Length.
-	 * @param string|null $encoding      Encoding.
+	 * @param string      $string      String.
+	 * @param string      $replacement Replacement.
+	 * @param int         $start       Start offset.
+	 * @param int|null    $length      Length.
+	 * @param string|null $encoding    Encoding.
 	 *
 	 * @return string
 	 */
@@ -131,7 +131,7 @@ class WMAC_PluginHelper {
 	/**
 	 * Decides whether this is a "subdirectory site" or not.
 	 *
-	 * @param bool $override   Allows overriding the decision when needed.
+	 * @param bool $override Allows overriding the decision when needed.
 	 *
 	 * @return bool
 	 */
@@ -197,18 +197,18 @@ class WMAC_PluginHelper {
 	/**
 	 * Returns true if given $url is protocol-relative.
 	 *
-	 * @param string $url   URL to check.
+	 * @param string $url URL to check.
 	 *
 	 * @return bool
 	 */
 	public static function isProtocolRelative( $url ) {
-		return ( '/' === $url{1} ); // second char is `/`.
+		return ( '/' === $url[1] ); // second char is `/`.
 	}
 
 	/**
 	 * Canonicalizes the given path regardless of it existing or not.
 	 *
-	 * @param string $path   Path to normalize.
+	 * @param string $path Path to normalize.
 	 *
 	 * @return string
 	 */
