@@ -54,7 +54,8 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 	private $cssremovables = [];
 	private $include_inline = false;
 	private $inject_min_late = '';
-	private $css_critical = '';
+	private $css_critical_style = '';
+	private $css_critical = [];
 
 	/**
 	 * Reads the page and collects style tags.
@@ -130,10 +131,21 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 		$this->inline = $options['inline'];
 		$this->inline = apply_filters( 'wmac_filter_css_inline', $this->inline, $this->content );
 
-		// Set critical css
+		// Set critical css code
 		// value: string
+		$this->css_critical_style = $options['css_critical_style'];
+		$this->css_critical_style = apply_filters( 'wmac_filter_css_critical_style', $this->css_critical_style, $this->content );
+
+		// Set critical css files
+		// value: array
 		$this->css_critical = $options['css_critical'];
 		$this->css_critical = apply_filters( 'wmac_filter_css_critical', $this->css_critical, $this->content );
+
+		if ( '' !== $this->css_critical ) {
+			$this->css_critical = array_filter( array_map( 'trim', explode( ',', $this->css_critical ) ) );
+		} else {
+			$this->css_critical = [];
+		}
 
 		// Store data: URIs setting for later use.
 		$this->datauris = $options['datauris'];
@@ -156,6 +168,12 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 			foreach ( $matches[0] as $tag ) {
 				if ( $this->isremovable( $tag, $this->cssremovables ) ) {
 					$this->content = str_replace( $tag, '', $this->content );
+				} else if ( $this->isCritical( $tag ) ) {
+					$this->content = str_replace( $tag, '', $this->content );
+
+					$replaceTag = [ '<title', 'before' ];
+					$replaceTag = apply_filters( 'wmac_filter_css_replacetag', $replaceTag, $this->content );
+					$this->injectInHtml( $tag, $replaceTag );
 				} else if ( $this->isMovable( $tag ) ) {
 					// Get the media.
 					if ( false !== strpos( $tag, 'media=' ) ) {
@@ -822,8 +840,8 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 			}
 		}
 
-		if ( ! empty( $this->css_critical ) ) {
-			$this->injectInHtml( "<style type='text/css'>{$this->css_critical}</style>", $replaceTag );
+		if ( ! empty( $this->css_critical_style ) ) {
+			$this->injectInHtml( "<style type='text/css'>{$this->css_critical_style}</style>", $replaceTag );
 		}
 
 		// Return the modified stylesheet.
@@ -942,12 +960,38 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 	}
 
 	/**
+	 * @param $tag
+	 *
+	 * @return bool
+	 */
+	private function isCritical( $tag ) {
+		if ( is_array( $this->css_critical ) && ! empty( $this->css_critical ) ) {
+			foreach ( $this->css_critical as $match ) {
+				$pattern = str_replace( '.', '\.', $match );
+				$pattern = str_replace( '*', '.*', $pattern );
+				$pattern = str_replace( '/', '\/', $pattern );
+				if ( preg_match( "/{$pattern}/", $tag )  ) {
+					$a = 1;
+				}
+				if ( false !== strpos( $tag, $match ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * @param $cssPath
 	 * @param $css
 	 *
 	 * @return bool
 	 */
-	private function canInjectLate( $cssPath, $css ) {
+	private
+	function canInjectLate(
+		$cssPath, $css
+	) {
 		$consider_minified_array = apply_filters( 'wmac_filter_css_consider_minified', false, $cssPath );
 		if ( true !== $this->inject_min_late ) {
 			// late-inject turned off.
@@ -976,7 +1020,10 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 	 *
 	 * @return bool|string Url pointing to the minified css file or false.
 	 */
-	public function minifySingle( $filepath, $cache_miss = false ) {
+	public
+	function minifySingle(
+		$filepath, $cache_miss = false
+	) {
 		$contents = $this->prepareMinifySingle( $filepath );
 
 		if ( empty( $contents ) ) {
@@ -1010,7 +1057,8 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 	 *
 	 * @return string
 	 */
-	public function getAoCssPreloadOnload() {
+	public
+	function getAoCssPreloadOnload() {
 		$preload_onload = apply_filters( 'wmac_filter_css_preload_onload', "this.onload=null;this.rel='stylesheet'" );
 
 		return $preload_onload;
@@ -1021,7 +1069,8 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 	 *
 	 * @return string
 	 */
-	public function getAoCssPreloadPolyfill() {
+	public
+	function getAoCssPreloadPolyfill() {
 		$preload_poly = apply_filters( 'wmac_filter_css_preload_polyfill', '<script data-cfasync=\'false\'>!function(t){"use strict";t.loadCSS||(t.loadCSS=function(){});var e=loadCSS.relpreload={};if(e.support=function(){var e;try{e=t.document.createElement("link").relList.supports("preload")}catch(t){e=!1}return function(){return e}}(),e.bindMediaToggle=function(t){function e(){t.media=a}var a=t.media||"all";t.addEventListener?t.addEventListener("load",e):t.attachEvent&&t.attachEvent("onload",e),setTimeout(function(){t.rel="stylesheet",t.media="only x"}),setTimeout(e,3e3)},e.poly=function(){if(!e.support())for(var a=t.document.getElementsByTagName("link"),n=0;n<a.length;n++){var o=a[n];"preload"!==o.rel||"style"!==o.getAttribute("as")||o.getAttribute("data-loadcss")||(o.setAttribute("data-loadcss",!0),e.bindMediaToggle(o))}},!e.support()){e.poly();var a=t.setInterval(e.poly,500);t.addEventListener?t.addEventListener("load",function(){e.poly(),t.clearInterval(a)}):t.attachEvent&&t.attachEvent("onload",function(){e.poly(),t.clearInterval(a)})}"undefined"!=typeof exports?exports.loadCSS=loadCSS:t.loadCSS=loadCSS}("undefined"!=typeof global?global:this);</script>' );
 
 		return $preload_poly;
@@ -1032,21 +1081,26 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 	 *
 	 * @return bool
 	 */
-	public function aggregating() {
+	public
+	function aggregating() {
 		return $this->aggregate;
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getOptions() {
+	public
+	function getOptions() {
 		return $this->options;
 	}
 
 	/**
 	 * @param $options
 	 */
-	public function replaceOptions( $options ) {
+	public
+	function replaceOptions(
+		$options
+	) {
 		$this->options = $options;
 	}
 
@@ -1054,7 +1108,10 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 	 * @param $name
 	 * @param $value
 	 */
-	public function setOption( $name, $value ) {
+	public
+	function setOption(
+		$name, $value
+	) {
 		$this->options[ $name ] = $value;
 		$this->$name            = $value;
 	}
@@ -1064,7 +1121,10 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 	 *
 	 * @return mixed
 	 */
-	public function getOption( $name ) {
+	public
+	function getOption(
+		$name
+	) {
 		return $this->options[ $name ];
 	}
 }

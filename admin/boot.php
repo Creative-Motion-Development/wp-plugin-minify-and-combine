@@ -120,6 +120,18 @@
 			'tags' => array()
 		);
 
+		$options[] = array(
+			'name' => 'css_critical',
+			'title' => __('Critical CSS files', 'minify-and-combine'),
+			'tags' => array()
+		);
+
+		$options[] = array(
+			'name' => 'css_critical_style',
+			'title' => __('Critical CSS code', 'minify-and-combine'),
+			'tags' => array()
+		);
+
 		return $options;
 	});
 

@@ -316,7 +316,15 @@ This can be fully automated for different types of pages with the Мinify And Co
 		$css_options[] = [
 			'type'    => 'textarea',
 			'name'    => 'css_critical',
-			'title'   => __( 'Critical CSS:', 'minify-and-combine' ),
+			'title'   => __( 'Critical CSS files:', 'minify-and-combine' ),
+			'hint'    => __( 'A comma-separated list of Critical CSS files.', 'minify-and-combine' ),
+			'default' => 'style.min.css, style.css, style-rtl.min.css, style-rtl.css'
+		];
+
+		$css_options[] = [
+			'type'    => 'textarea',
+			'name'    => 'css_critical_style',
+			'title'   => __( 'Critical CSS code:', 'minify-and-combine' ),
 			'hint'    => htmlspecialchars( __( 'Add critical CSS here. We will insert it into <style> tags in your <head> section of each page.', 'minify-and-combine' ) ),
 			'default' => ''
 		];

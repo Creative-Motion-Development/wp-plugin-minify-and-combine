@@ -4,7 +4,7 @@
  * Plugin URI: https://webcraftic.com
  * Description: Optimizes your website, concatenating the CSS and JavaScript code, and compressing it.
  * Author: Webcraftic <wordpress.webraftic@gmail.com>
- * Version: 1.1.0
+ * Version: 1.1.1
  * Text Domain: minify-and-combine
  * Domain Path: /languages/
  * Author URI: https://webcraftic.com

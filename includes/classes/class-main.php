@@ -165,7 +165,7 @@ class WMAC_PluginMain {
 			}
 
 			if ( apply_filters( 'wmac_filter_obkiller', false ) ) {
-				while( ob_get_level() > 0 ) {
+				while ( ob_get_level() > 0 ) {
 					ob_end_clean();
 				}
 			}
@@ -178,7 +178,7 @@ class WMAC_PluginMain {
 	/**
 	 * Returns true if all the conditions to start output buffering are satisfied.
 	 *
-	 * @param bool $doing_tests   Allows overriding the optimization of only
+	 * @param bool $doing_tests Allows overriding the optimization of only
 	 *                            deciding once per request (for use in tests).
 	 *
 	 * @return bool
@@ -237,7 +237,7 @@ class WMAC_PluginMain {
 	/**
 	 * Returns true if given markup is considered valid/processable/optimizable.
 	 *
-	 * @param string $content   Markup.
+	 * @param string $content Markup.
 	 *
 	 * @return bool
 	 */
@@ -268,7 +268,7 @@ class WMAC_PluginMain {
 	 * Returns true if given $content is considered to be AMP markup.
 	 * This is far from actual validation against AMP spec, but it'll do for now.
 	 *
-	 * @param string $content   Markup to check.
+	 * @param string $content Markup to check.
 	 *
 	 * @return bool
 	 */
@@ -282,7 +282,7 @@ class WMAC_PluginMain {
 	 * Processes/optimizes the output-buffered content and returns it.
 	 * If the content is not processable, it is returned unmodified.
 	 *
-	 * @param string $content   Buffered content.
+	 * @param string $content Buffered content.
 	 *
 	 * @return string
 	 */
@@ -310,13 +310,14 @@ class WMAC_PluginMain {
 				'include_inline' => WMAC_Plugin::app()->getPopulateOption( 'js_include_inline' ),
 			],
 			'WMAC_PluginStyles'  => [
-				'aggregate'      => WMAC_Plugin::app()->getPopulateOption( 'css_aggregate' ),
-				'datauris'       => WMAC_Plugin::app()->getPopulateOption( 'css_datauris' ),
-				'defer'          => WMAC_Plugin::app()->getPopulateOption( 'css_defer' ),
-				'inline'         => WMAC_Plugin::app()->getPopulateOption( 'css_inline' ),
-				'css_exclude'    => WMAC_Plugin::app()->getPopulateOption( 'css_exclude' ),
-				'include_inline' => WMAC_Plugin::app()->getPopulateOption( 'css_include_inline' ),
-				'css_critical'   => WMAC_Plugin::app()->getPopulateOption( 'css_critical' ),
+				'aggregate'          => WMAC_Plugin::app()->getPopulateOption( 'css_aggregate' ),
+				'datauris'           => WMAC_Plugin::app()->getPopulateOption( 'css_datauris' ),
+				'defer'              => WMAC_Plugin::app()->getPopulateOption( 'css_defer' ),
+				'inline'             => WMAC_Plugin::app()->getPopulateOption( 'css_inline' ),
+				'css_exclude'        => WMAC_Plugin::app()->getPopulateOption( 'css_exclude' ),
+				'include_inline'     => WMAC_Plugin::app()->getPopulateOption( 'css_include_inline' ),
+				'css_critical'       => WMAC_Plugin::app()->getPopulateOption( 'css_critical' ),
+				'css_critical_style' => WMAC_Plugin::app()->getPopulateOption( 'css_critical_style' ),
 			],
 		];
 
