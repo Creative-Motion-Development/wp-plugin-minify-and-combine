@@ -316,6 +316,7 @@ class WMAC_PluginMain {
 				'inline'         => WMAC_Plugin::app()->getPopulateOption( 'css_inline' ),
 				'css_exclude'    => WMAC_Plugin::app()->getPopulateOption( 'css_exclude' ),
 				'include_inline' => WMAC_Plugin::app()->getPopulateOption( 'css_include_inline' ),
+				'css_critical'   => WMAC_Plugin::app()->getPopulateOption( 'css_critical' ),
 			],
 		];
 

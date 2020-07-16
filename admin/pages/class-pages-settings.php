@@ -50,9 +50,10 @@ class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryClearfy000_PageBase 
 	/**
 	 * WMAC_MinifyAndCombineSettingsPage constructor.
 	 *
+	 * @param \Wbcr_Factory000_Plugin $plugin
+	 *
 	 * @author Alexander Kovalev <alex.kovalevv@gmail.com>
 	 *
-	 * @param \Wbcr_Factory000_Plugin $plugin
 	 */
 	public function __construct( Wbcr_Factory000_Plugin $plugin ) {
 		$this->menu_title = __( 'Minify (JS/CSS)', 'minify-and-combine' );
@@ -70,9 +71,9 @@ class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryClearfy000_PageBase 
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @author Alexander Kovalev <alex.kovalevv@gmail.com>
-	 * @since  1.0.0
 	 * @return string|void
+	 * @since  1.0.0
+	 * @author Alexander Kovalev <alex.kovalevv@gmail.com>
 	 */
 	public function getMenuTitle() {
 		return defined( 'LOADING_MINIFY_AND_COMBINE_AS_ADDON' ) ? __( 'Minify (Html/JS/CSS)', 'minify-and-combine' ) : __( 'General', 'minify-and-combine' );
@@ -100,8 +101,8 @@ class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryClearfy000_PageBase 
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @since 1.0.0
 	 * @return mixed[]
+	 * @since 1.0.0
 	 */
 	public function getPageOptions() {
 		$options = [];
@@ -312,6 +313,14 @@ This can be fully automated for different types of pages with the Мinify And Co
 			'default' => 'wp-content/cache/, wp-content/uploads/, admin-bar.min.css, dashicons.min.css'
 		];
 
+		$css_options[] = [
+			'type'    => 'textarea',
+			'name'    => 'css_critical',
+			'title'   => __( 'Critical CSS:', 'minify-and-combine' ),
+			'hint'    => htmlspecialchars( __( 'Add critical CSS here. We will insert it into <style> tags in your <head> section of each page.', 'minify-and-combine' ) ),
+			'default' => ''
+		];
+
 		$options[] = [
 			'type'  => 'div',
 			'id'    => 'wbcr-clr-optimize-css-fields',
@@ -379,7 +388,8 @@ This can be fully automated for different types of pages with the Мinify And Co
             <label for="wbcr_mac_css_optimize" class="col-sm-4 control-label">
             </label>
             <div class="control-group col-sm-8">
-                <a class="btn btn-default" href="<?= wp_nonce_url( $this->getActionUrl( 'clear-cache' ), 'clear_cache_' . $this->getResultId() ); ?>">
+                <a class="btn btn-default"
+                   href="<?= wp_nonce_url( $this->getActionUrl( 'clear-cache' ), 'clear_cache_' . $this->getResultId() ); ?>">
 					<?php _e( 'Clear cache', 'minify-and-combine' ) ?>
                 </a>
             </div>

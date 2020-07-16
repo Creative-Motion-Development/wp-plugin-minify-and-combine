@@ -54,6 +54,7 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 	private $cssremovables = [];
 	private $include_inline = false;
 	private $inject_min_late = '';
+	private $css_critical = '';
 
 	/**
 	 * Reads the page and collects style tags.
@@ -128,6 +129,11 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 		// value: true / false.
 		$this->inline = $options['inline'];
 		$this->inline = apply_filters( 'wmac_filter_css_inline', $this->inline, $this->content );
+
+		// Set critical css
+		// value: string
+		$this->css_critical = $options['css_critical'];
+		$this->css_critical = apply_filters( 'wmac_filter_css_critical', $this->css_critical, $this->content );
 
 		// Store data: URIs setting for later use.
 		$this->datauris = $options['datauris'];
@@ -399,7 +405,7 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 	 * it does so by replacing the longest-matching strings first.
 	 *
 	 * @param string $string
-	 * @param array  $replacements
+	 * @param array $replacements
 	 *
 	 * @return string
 	 */
@@ -616,7 +622,7 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 
 			// remove comments to avoid importing commented-out imports.
 			$thiscss_nocomments = preg_replace( '#/\*.*\*/#Us', '', $thiscss );
-			while( preg_match_all( '#@import +(?:url)?(?:(?:\((["\']?)(?:[^"\')]+)\1\)|(["\'])(?:[^"\']+)\2)(?:[^,;"\']+(?:,[^,;"\']+)*)?)(?:;)#mi', $thiscss_nocomments, $matches ) ) {
+			while ( preg_match_all( '#@import +(?:url)?(?:(?:\((["\']?)(?:[^"\')]+)\1\)|(["\'])(?:[^"\']+)\2)(?:[^,;"\']+(?:,[^,;"\']+)*)?)(?:;)#mi', $thiscss_nocomments, $matches ) ) {
 				foreach ( $matches[0] as $import ) {
 					if ( $this->isremovable( $import, $this->cssremovables ) ) {
 						$thiscss   = str_replace( $import, '', $thiscss );
@@ -816,6 +822,10 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 			}
 		}
 
+		if ( ! empty( $this->css_critical ) ) {
+			$this->injectInHtml( "<style type='text/css'>{$this->css_critical}</style>", $replaceTag );
+		}
+
 		// Return the modified stylesheet.
 		return $this->content;
 	}
@@ -961,8 +971,8 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 	 * Minifies a single local css file
 	 * and returns its (cached) url.
 	 *
-	 * @param string $filepath   Filepath.
-	 * @param bool   $cache_miss Optional. Force a cache miss. Default false.
+	 * @param string $filepath Filepath.
+	 * @param bool $cache_miss Optional. Force a cache miss. Default false.
 	 *
 	 * @return bool|string Url pointing to the minified css file or false.
 	 */
