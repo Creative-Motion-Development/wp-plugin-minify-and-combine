@@ -313,26 +313,31 @@ This can be fully automated for different types of pages with the Мinify And Co
 			'default' => 'wp-content/cache/, wp-content/uploads/, admin-bar.min.css, dashicons.min.css'
 		];
 
-		$css_options[] = [
+		$options[] = [
+			'type'  => 'div',
+			'id'    => 'wbcr-clr-optimize-css-fields',
+			'items' => $css_options
+		];
+
+		$options[] = [
+			'type' => 'html',
+			'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __( 'Critical CSS', 'minify-and-combine' ) . '</strong><p></p></div>'
+		];
+
+		$options[] = [
 			'type'    => 'textarea',
 			'name'    => 'css_critical',
 			'title'   => __( 'Critical CSS files:', 'minify-and-combine' ),
-			'hint'    => __( 'A comma-separated list of Critical CSS files.', 'minify-and-combine' ),
-			'default' => 'style.min.css, style.css, style-rtl.min.css, style-rtl.css'
+			'hint'    => __( 'A comma-separated list of Critical CSS files. (You can use the * mask in file names. * - these are any characters.)', 'minify-and-combine' ),
+			'default' => 'style.css, themes/*/style.css, style.min.css, themes/*/style.min.css'
 		];
 
-		$css_options[] = [
+		$options[] = [
 			'type'    => 'textarea',
 			'name'    => 'css_critical_style',
 			'title'   => __( 'Critical CSS code:', 'minify-and-combine' ),
 			'hint'    => htmlspecialchars( __( 'Add critical CSS here. We will insert it into <style> tags in your <head> section of each page.', 'minify-and-combine' ) ),
 			'default' => ''
-		];
-
-		$options[] = [
-			'type'  => 'div',
-			'id'    => 'wbcr-clr-optimize-css-fields',
-			'items' => $css_options
 		];
 
 		$options[] = [

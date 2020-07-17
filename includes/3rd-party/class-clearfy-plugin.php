@@ -73,6 +73,7 @@ class WMAC_Plugin {
 		require_once( WMAC_PLUGIN_DIR . '/includes/classes/class-scripts.php' );
 		require_once( WMAC_PLUGIN_DIR . '/includes/classes/class-css-min.php' );
 		require_once( WMAC_PLUGIN_DIR . '/includes/classes/class-styles.php' );
+		require_once( WMAC_PLUGIN_DIR . '/includes/classes/class-criticalcss.php' );
 		require_once( WMAC_PLUGIN_DIR . '/includes/classes/class-main.php' );
 		require_once( WMAC_PLUGIN_DIR . '/includes/classes/class-helper.php' );
 

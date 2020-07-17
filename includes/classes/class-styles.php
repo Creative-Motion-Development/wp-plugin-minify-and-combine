@@ -131,22 +131,6 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 		$this->inline = $options['inline'];
 		$this->inline = apply_filters( 'wmac_filter_css_inline', $this->inline, $this->content );
 
-		// Set critical css code
-		// value: string
-		$this->css_critical_style = $options['css_critical_style'];
-		$this->css_critical_style = apply_filters( 'wmac_filter_css_critical_style', $this->css_critical_style, $this->content );
-
-		// Set critical css files
-		// value: array
-		$this->css_critical = $options['css_critical'];
-		$this->css_critical = apply_filters( 'wmac_filter_css_critical', $this->css_critical, $this->content );
-
-		if ( '' !== $this->css_critical ) {
-			$this->css_critical = array_filter( array_map( 'trim', explode( ',', $this->css_critical ) ) );
-		} else {
-			$this->css_critical = [];
-		}
-
 		// Store data: URIs setting for later use.
 		$this->datauris = $options['datauris'];
 
@@ -168,12 +152,6 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 			foreach ( $matches[0] as $tag ) {
 				if ( $this->isremovable( $tag, $this->cssremovables ) ) {
 					$this->content = str_replace( $tag, '', $this->content );
-				} else if ( $this->isCritical( $tag ) ) {
-					$this->content = str_replace( $tag, '', $this->content );
-
-					$replaceTag = [ '<title', 'before' ];
-					$replaceTag = apply_filters( 'wmac_filter_css_replacetag', $replaceTag, $this->content );
-					$this->injectInHtml( $tag, $replaceTag );
 				} else if ( $this->isMovable( $tag ) ) {
 					// Get the media.
 					if ( false !== strpos( $tag, 'media=' ) ) {
@@ -957,29 +935,6 @@ class WMAC_PluginStyles extends WMAC_PluginBase {
 			// If we're here it's safe to move.
 			return true;
 		}
-	}
-
-	/**
-	 * @param $tag
-	 *
-	 * @return bool
-	 */
-	private function isCritical( $tag ) {
-		if ( is_array( $this->css_critical ) && ! empty( $this->css_critical ) ) {
-			foreach ( $this->css_critical as $match ) {
-				$pattern = str_replace( '.', '\.', $match );
-				$pattern = str_replace( '*', '.*', $pattern );
-				$pattern = str_replace( '/', '\/', $pattern );
-				if ( preg_match( "/{$pattern}/", $tag )  ) {
-					$a = 1;
-				}
-				if ( false !== strpos( $tag, $match ) ) {
-					return true;
-				}
-			}
-		}
-
-		return false;
 	}
 
 	/**
