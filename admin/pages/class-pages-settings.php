@@ -149,7 +149,7 @@ class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryClearfy000_PageBase 
 			]
 		];
 
-		$options[] = [
+		$mtf_checkbox = [
 			'type' => 'checkbox',
 			'way' => 'buttons',
 			'name' => 'move_js_to_footer',
@@ -164,6 +164,12 @@ class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryClearfy000_PageBase 
 				'hide' => '.factory-control-dont_move_jquery_to_footer, .factory-control-excluded_move_to_footer_scripts'
 			]
 		];
+		if( !($this->plugin->has_premium() && $this->plugin->premium->is_activate()) ) {
+			$mtf_checkbox['value'] = false;
+			$mtf_checkbox['cssClass'] = ['factory-checkbox-disabled wbcr-factory-clearfy-icon-pro'];
+		}
+
+		$options[] = $mtf_checkbox;
 
 		$options[] = [
 			'type' => 'checkbox',
