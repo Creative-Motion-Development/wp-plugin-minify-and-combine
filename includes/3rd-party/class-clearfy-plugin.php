@@ -79,8 +79,7 @@ class WMAC_Plugin {
 		require_once(WMAC_PLUGIN_DIR . '/includes/classes/class-criticalcss.php');
 		require_once(WMAC_PLUGIN_DIR . '/includes/classes/class-main.php');
 		require_once(WMAC_PLUGIN_DIR . '/includes/classes/class-helper.php');
-		require_once(WMAC_PLUGIN_DIR . '/includes/classes/class-move-scripts-to-footer.php');
-
+		
 		require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/jsmin.php');
 		require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Colors.php');
 		require_once(WMAC_PLUGIN_DIR . '/includes/classes/ext/php/yui-php-cssmin-bundled/Minifier.php');
