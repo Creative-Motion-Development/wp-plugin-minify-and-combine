@@ -57,7 +57,8 @@ class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryClearfy000_PageBase 
 	 */
 	public function __construct(Wbcr_Factory000_Plugin $plugin)
 	{
-		$this->menu_title = __('Minify (JS/CSS)', 'minify-and-combine');
+		$this->menu_title = __('Optimize CSS & JS', 'minify-and-combine');
+		$this->page_menu_short_description = __('Optimize CSS & JS', 'minify-and-combine');
 
 		if( !defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ) {
 			$this->internal = false;
@@ -78,7 +79,7 @@ class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryClearfy000_PageBase 
 	 */
 	public function getMenuTitle()
 	{
-		return defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ? __('Minify (Html/JS/CSS)', 'minify-and-combine') : __('General', 'minify-and-combine');
+		return defined('LOADING_MINIFY_AND_COMBINE_AS_ADDON') ? __('Optimize CSS & JS', 'minify-and-combine') : __('General', 'minify-and-combine');
 	}
 
 	/**
@@ -130,7 +131,172 @@ class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryClearfy000_PageBase 
 
 		$options[] = [
 			'type' => 'html',
-			'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('JavaScript Files', 'minify-and-combine') . '</strong><p></p></div>'
+			'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('Misc Options', 'minify-and-combine') . '</strong><p></p></div>'
+		];
+
+		$options[] = [
+			'type' => 'checkbox',
+			'way' => 'buttons',
+			'name' => 'optimize_scripts_for_logged',
+			'title' => __('Also optimize JS/CSS for logged in editors/administrators?', 'minify-and-combine'),
+			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
+			'hint' => __('By default plugin is also active for logged on editors/administrators, uncheck this option if you don\'t want Autoptimize to optimize when logged in e.g. to use a pagebuilder.', 'minify-and-combine'),
+			'default' => false
+		];
+
+		$options[] = [
+			'type' => 'html',
+			'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('Optimize CSS', 'minify-and-combine') . '</strong><p></p></div>'
+		];
+
+		$options[] = [
+			'type' => 'checkbox',
+			'way' => 'buttons',
+			'name' => 'css_optimize',
+			'title' => __('Optimize CSS Code?', 'minify-and-combine'),
+			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'green'],
+			'hint' => __('If your scripts break because of a JS-error, you might want to try this.', 'minify-and-combine'),
+			'default' => false,
+			'eventsOn' => [
+				'show' => '#wbcr-clr-optimize-css-fields'
+			],
+			'eventsOff' => [
+				'hide' => '#wbcr-clr-optimize-css-fields'
+			]
+		];
+
+		$options[] = [
+			'type' => 'checkbox',
+			'way' => 'buttons',
+			'name' => 'css_aggregate',
+			'title' => __('Aggregate CSS-files?', 'minify-and-combine'),
+			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'red'],
+			'hint' => __('Aggregate all linked CSS-files? If this option is off, the individual CSS-files will remain in place but will be minified.', 'minify-and-combine'),
+			'default' => false,
+			'eventsOn' => [
+				'show' => '#wbcr-mac-optimization-danger-message-4'
+			],
+			'eventsOff' => [
+				'hide' => '#wbcr-mac-optimization-danger-message-4'
+			]
+		];
+
+		$options[] = [
+			'type' => 'html',
+			'html' => [$this, 'optimizationDangerMessage4']
+		];
+
+		$options[] = [
+			'type' => 'checkbox',
+			'way' => 'buttons',
+			'name' => 'remove_style_version',
+			'title' => __('Remove Version from Stylesheet', 'clearfy') . ' <span class="wbcr-clearfy-recomended-text">(' . __('Recommended', 'clearfy') . ')</span>',
+			'layout' => ['hint-type' => 'icon'],
+			'hint' => __('To make it more difficult for others to hack your website you can remove the WordPress version number from your site, your css and js. Without that number it\'s not possible to see if you run not the current version to exploit bugs from the older versions. <br><br>
+					Additionally it can improve the loading speed of your site, because without query strings in the URL the css and js files can be cached.', 'clearfy') . '<br><br><b>Clearfy: </b>' . __('Removes the wordpress version number from stylesheets (not logged in user only).', 'clearfy'),
+			'default' => false,
+			'eventsOn' => array(
+				'show' => '.factory-control-disable_remove_style_version_for_auth_users'
+			),
+			'eventsOff' => array(
+				'hide' => '.factory-control-disable_remove_style_version_for_auth_users'
+			)
+		];
+
+		$options[] = [
+			'type' => 'textarea',
+			'name' => 'css_exclude',
+			'title' => __('Exclude CSS from Мinify And Combine:', 'minify-and-combine'),
+			//'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
+			'hint' => __('A comma-separated list of CSS you want to exclude from being optimized.', 'minify-and-combine'),
+			'default' => 'wp-content/cache/, wp-content/uploads/, admin-bar.min.css, dashicons.min.css'
+		];
+
+		$options[] = [
+			'type' => 'more-link',
+			'name' => 'css-group',
+			'title' => __('Advanced options', 'clearfy'),
+			'count' => 6,
+			'items' => [
+				[
+					'type' => 'checkbox',
+					'way' => 'buttons',
+					'name' => 'css_include_inline',
+					'title' => __('Also aggregate inline CSS?', 'minify-and-combine'),
+					'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
+					'hint' => __('Check this option for Мinify And Combine to also aggregate CSS in the HTML.', 'minify-and-combine'),
+					'default' => false,
+					'eventsOn' => [
+						'show' => '#wbcr-mac-optimization-danger-message-5'
+					],
+					'eventsOff' => [
+						'hide' => '#wbcr-mac-optimization-danger-message-5'
+					]
+				],
+
+				[
+					'type' => 'html',
+					'html' => [$this, 'optimizationDangerMessage5']
+				],
+
+				[
+					'type' => 'checkbox',
+					'way' => 'buttons',
+					'name' => 'css_datauris',
+					'title' => __('Generate data: URIs for images?', 'minify-and-combine'),
+					'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
+					'hint' => __('Enable this to include small background-images in the CSS itself instead of as separate downloads.', 'minify-and-combine'),
+					'default' => false
+				],
+
+				[
+					'type' => 'checkbox',
+					'way' => 'buttons',
+					'name' => 'css_defer',
+					'title' => __('Inline and Defer CSS?', 'minify-and-combine'),
+					'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
+					'hint' => __('Inline "above the fold CSS" while loading the main auto optimized CSS only after page load. Check the FAQ for more info.
+This can be fully automated for different types of pages with the Мinify And Combine CriticalCSS Power-Up.', 'minify-and-combine'),
+					'default' => false
+				],
+
+				[
+					'type' => 'checkbox',
+					'way' => 'buttons',
+					'name' => 'css_inline',
+					'title' => __('Inline all CSS?', 'minify-and-combine'),
+					'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
+					'hint' => __('Inlining all CSS can improve performance for sites with a low pageviews/ visitor-rate, but may slow down performance otherwise.', 'minify-and-combine'),
+					'default' => false
+				],
+
+				/*[
+					'type' => 'html',
+					'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('Critical CSS', 'minify-and-combine') . '</strong><p></p></div>'
+				],*/
+
+				[
+					'type' => 'textarea',
+					'name' => 'css_critical',
+					'title' => __('Critical CSS files:', 'minify-and-combine'),
+					'hint' => __('A comma-separated list of Critical CSS files. (You can use the * mask in file names. * - these are any characters.)', 'minify-and-combine'),
+					'default' => 'style.css, themes/*/style.css, style.min.css, themes/*/style.min.css'
+				],
+
+				[
+					'type' => 'textarea',
+					'name' => 'css_critical_style',
+					'title' => __('Critical CSS code:', 'minify-and-combine'),
+					'hint' => htmlspecialchars(__('Add critical CSS here. We will insert it into <style> tags in your <head> section of each page.', 'minify-and-combine')),
+					'default' => ''
+				]
+
+			]
+		];
+
+		$options[] = [
+			'type' => 'html',
+			'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('Optimize JavaScript', 'minify-and-combine') . '</strong><p></p></div>'
 		];
 
 		$options[] = [
@@ -138,7 +304,7 @@ class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryClearfy000_PageBase 
 			'way' => 'buttons',
 			'name' => 'js_optimize',
 			'title' => __('Optimize JavaScript Code?', 'minify-and-combine'),
-			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
+			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'green'],
 			'hint' => __('Minify JavaScript removes whitespace and comments to reduce the file size.', 'minify-and-combine'),
 			'default' => false,
 			'eventsOn' => [
@@ -169,39 +335,22 @@ class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryClearfy000_PageBase 
 			$mtf_checkbox['cssClass'] = ['factory-checkbox-disabled wbcr-factory-clearfy-icon-pro'];
 		}
 
-		$options[] = $mtf_checkbox;
-
-		$options[] = [
-			'type' => 'checkbox',
-			'name' => 'dont_move_jquery_to_footer',
-			'title' => "",
-			'hint' => __("Don't move jQuery to footer", 'minify-and-combine'),
-			'default' => true
-		];
-		$options[] = [
-			'type' => 'textarea',
-			'name' => 'excluded_move_to_footer_scripts',
-			'title' => "",
-			'hint' => __("A comma-separated list of scripts you want to exclude from being optimized, for example 'whatever.js, another.js' (without the quotes) to exclude those scripts from being aggregated and minimized by Мinify And Combine.", 'minify-and-combine'),
-			'default' => ''
-		];
-
-		$options[] = [
+		/*$options[] = [
 			'type' => 'html',
 			'html' => [$this, 'move_to_footer_js_options']
-		];
+		];*/
 
 		/*$options[] = array(
 			'type' => 'html',
 			'html' => array( $this, 'optimizationDangerMessage1' )
 		);*/
 
-		$js_options[] = [
+		$options[] = [
 			'type' => 'checkbox',
 			'way' => 'buttons',
 			'name' => 'js_aggregate',
 			'title' => __('Aggregate JS-files?', 'minify-and-combine'),
-			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
+			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'red'],
 			'hint' => __('Aggregate all linked JS-files to have them loaded non-render blocking? If this option is off, the individual JS-files will remain in place but will be minified.', 'minify-and-combine'),
 			'default' => false,
 			'eventsOn' => [
@@ -212,43 +361,23 @@ class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryClearfy000_PageBase 
 			]
 		];
 
-		$js_options[] = [
+		$options[] = [
 			'type' => 'html',
 			'html' => [$this, 'optimizationDangerMessage2']
 		];
 
-		$js_options[] = [
+		$options[] = [
 			'type' => 'checkbox',
 			'way' => 'buttons',
-			'name' => 'js_include_inline',
-			'title' => __('Also aggregate inline JS?', 'minify-and-combine'),
-			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
-			'hint' => __('Let Мinify And Combine also extract JS from the HTML. Warning: this can make Мinify And Combine\'s cache size grow quickly, so only enable this if you know what you\'re doing.', 'minify-and-combine'),
-			'default' => false,
-			'eventsOn' => [
-				'show' => '#wbcr-mac-optimization-danger-message-3'
-			],
-			'eventsOff' => [
-				'hide' => '#wbcr-mac-optimization-danger-message-3'
-			]
-		];
-
-		$js_options[] = [
-			'type' => 'html',
-			'html' => [$this, 'optimizationDangerMessage3']
-		];
-
-		$js_options[] = [
-			'type' => 'checkbox',
-			'way' => 'buttons',
-			'name' => 'js_forcehead',
-			'title' => __('Force JavaScript in &lt;head&gt;?', 'minify-and-combine'),
-			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
-			'hint' => __('Load JavaScript early, this can potentially fix some JS-errors, but makes the JS render blocking.', 'minify-and-combine'),
+			'name' => 'remove_js_version',
+			'title' => __('Remove Version from Script', 'clearfy') . ' <span class="wbcr-clearfy-recomended-text">(' . __('Recommended', 'clearfy') . ')</span>',
+			'layout' => ['hint-type' => 'icon'],
+			'hint' => __('To make it more difficult for others to hack your website you can remove the WordPress version number from your site, your css and js. Without that number it\'s not possible to see if you run not the current version to exploit bugs from the older versions. <br><br>
+					Additionally it can improve the loading speed of your site, because without query strings in the URL the css and js files can be cached.', 'clearfy') . '<br><br><b>Clearfy: </b>' . __('Removes wordpress version number from scripts (not logged in user only).', 'clearfy'),
 			'default' => false
 		];
 
-		$js_options[] = [
+		$options[] = [
 			'type' => 'textarea',
 			'name' => 'js_exclude',
 			'title' => __('Exclude scripts from Мinify And Combine:', 'minify-and-combine'),
@@ -257,172 +386,103 @@ class WMAC_MinifyAndCombineSettingsPage extends Wbcr_FactoryClearfy000_PageBase 
 			'default' => 'seal.js, js/jquery/jquery.js'
 		];
 
-		$js_options[] = [
-			'type' => 'checkbox',
-			'way' => 'buttons',
-			'name' => 'js_trycatch',
-			'title' => __('Add try-catch wrapping?', 'minify-and-combine'),
-			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
-			'hint' => __('If your scripts break because of a JS-error, you might want to try this.', 'minify-and-combine'),
-			'default' => false
-		];
-
-		$options[] = [
+		/*$options[] = [
 			'type' => 'div',
 			'id' => 'wbcr-mac-optimize-js-fields',
 			'items' => $js_options
-		];
+		];*/
 
 		$options[] = [
-			'type' => 'html',
-			'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('CSS files', 'minify-and-combine') . '</strong><p></p></div>'
-		];
+			'type' => 'more-link',
+			'name' => 'js-group',
+			'title' => __('Advanced options', 'clearfy'),
+			'count' => 4,
+			'items' => [
+				[
+					'type' => 'checkbox',
+					'way' => 'buttons',
+					'name' => 'js_include_inline',
+					'title' => __('Also aggregate inline JS?', 'minify-and-combine'),
+					'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
+					'hint' => __('Let Мinify And Combine also extract JS from the HTML. Warning: this can make Мinify And Combine\'s cache size grow quickly, so only enable this if you know what you\'re doing.', 'minify-and-combine'),
+					'default' => false,
+					'eventsOn' => [
+						'show' => '#wbcr-mac-optimization-danger-message-3'
+					],
+					'eventsOff' => [
+						'hide' => '#wbcr-mac-optimization-danger-message-3'
+					]
+				],
 
-		$options[] = [
-			'type' => 'checkbox',
-			'way' => 'buttons',
-			'name' => 'css_optimize',
-			'title' => __('Optimize CSS Code?', 'minify-and-combine'),
-			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
-			'hint' => __('If your scripts break because of a JS-error, you might want to try this.', 'minify-and-combine'),
-			'default' => false,
-			'eventsOn' => [
-				'show' => '#wbcr-clr-optimize-css-fields'
-			],
-			'eventsOff' => [
-				'hide' => '#wbcr-clr-optimize-css-fields'
+				[
+					'type' => 'html',
+					'html' => [$this, 'optimizationDangerMessage3']
+				],
+				$mtf_checkbox,
+				[
+					'type' => 'checkbox',
+					'name' => 'dont_move_jquery_to_footer',
+					'title' => "",
+					'hint' => __("Don't move jQuery to footer", 'minify-and-combine'),
+					'default' => true
+				],
+				[
+					'type' => 'textarea',
+					'name' => 'excluded_move_to_footer_scripts',
+					'title' => "",
+					'hint' => __("A comma-separated list of scripts you want to exclude from being optimized, for example 'whatever.js, another.js' (without the quotes) to exclude those scripts from being aggregated and minimized by Мinify And Combine.", 'minify-and-combine'),
+					'default' => ''
+				],
+				[
+					'type' => 'checkbox',
+					'way' => 'buttons',
+					'name' => 'js_forcehead',
+					'title' => __('Force JavaScript in &lt;head&gt;?', 'minify-and-combine'),
+					'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
+					'hint' => __('Load JavaScript early, this can potentially fix some JS-errors, but makes the JS render blocking.', 'minify-and-combine'),
+					'default' => false
+				],
+				[
+					'type' => 'checkbox',
+					'way' => 'buttons',
+					'name' => 'js_trycatch',
+					'title' => __('Add try-catch wrapping?', 'minify-and-combine'),
+					'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
+					'hint' => __('If your scripts break because of a JS-error, you might want to try this.', 'minify-and-combine'),
+					'default' => false
+				]
 			]
 		];
 
-		$css_options[] = [
-			'type' => 'checkbox',
-			'way' => 'buttons',
-			'name' => 'css_aggregate',
-			'title' => __('Aggregate CSS-files?', 'minify-and-combine'),
-			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
-			'hint' => __('Aggregate all linked CSS-files? If this option is off, the individual CSS-files will remain in place but will be minified.', 'minify-and-combine'),
-			'default' => false,
-			'eventsOn' => [
-				'show' => '#wbcr-mac-optimization-danger-message-4'
-			],
-			'eventsOff' => [
-				'hide' => '#wbcr-mac-optimization-danger-message-4'
-			]
-		];
-
-		$css_options[] = [
-			'type' => 'html',
-			'html' => [$this, 'optimizationDangerMessage4']
-		];
-
-		$css_options[] = [
-			'type' => 'checkbox',
-			'way' => 'buttons',
-			'name' => 'css_include_inline',
-			'title' => __('Also aggregate inline CSS?', 'minify-and-combine'),
-			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
-			'hint' => __('Check this option for Мinify And Combine to also aggregate CSS in the HTML.', 'minify-and-combine'),
-			'default' => false,
-			'eventsOn' => [
-				'show' => '#wbcr-mac-optimization-danger-message-5'
-			],
-			'eventsOff' => [
-				'hide' => '#wbcr-mac-optimization-danger-message-5'
-			]
-		];
-
-		$css_options[] = [
-			'type' => 'html',
-			'html' => [$this, 'optimizationDangerMessage5']
-		];
-
-		$css_options[] = [
-			'type' => 'checkbox',
-			'way' => 'buttons',
-			'name' => 'css_datauris',
-			'title' => __('Generate data: URIs for images?', 'minify-and-combine'),
-			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
-			'hint' => __('Enable this to include small background-images in the CSS itself instead of as separate downloads.', 'minify-and-combine'),
-			'default' => false
-		];
-
-		$css_options[] = [
-			'type' => 'checkbox',
-			'way' => 'buttons',
-			'name' => 'css_defer',
-			'title' => __('Inline and Defer CSS?', 'minify-and-combine'),
-			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
-			'hint' => __('Inline "above the fold CSS" while loading the main auto optimized CSS only after page load. Check the FAQ for more info.
-This can be fully automated for different types of pages with the Мinify And Combine CriticalCSS Power-Up.', 'minify-and-combine'),
-			'default' => false
-		];
-
-		$css_options[] = [
-			'type' => 'checkbox',
-			'way' => 'buttons',
-			'name' => 'css_inline',
-			'title' => __('Inline all CSS?', 'minify-and-combine'),
-			'layout' => ['hint-type' => 'icon', 'hint-icon-color' => 'grey'],
-			'hint' => __('Inlining all CSS can improve performance for sites with a low pageviews/ visitor-rate, but may slow down performance otherwise.', 'minify-and-combine'),
-			'default' => false
-		];
-
-		$css_options[] = [
-			'type' => 'textarea',
-			'name' => 'css_exclude',
-			'title' => __('Exclude CSS from Мinify And Combine:', 'minify-and-combine'),
-			//'layout' => array('hint-type' => 'icon', 'hint-icon-color' => 'grey'),
-			'hint' => __('A comma-separated list of CSS you want to exclude from being optimized.', 'minify-and-combine'),
-			'default' => 'wp-content/cache/, wp-content/uploads/, admin-bar.min.css, dashicons.min.css'
-		];
-
-		$options[] = [
+		/*$options[] = [
 			'type' => 'div',
 			'id' => 'wbcr-clr-optimize-css-fields',
 			'items' => $css_options
-		];
+		];*/
 
-		$options[] = [
+		/*$options[] = [
 			'type' => 'html',
-			'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('Critical CSS', 'minify-and-combine') . '</strong><p></p></div>'
-		];
-
-		$options[] = [
-			'type' => 'textarea',
-			'name' => 'css_critical',
-			'title' => __('Critical CSS files:', 'minify-and-combine'),
-			'hint' => __('A comma-separated list of Critical CSS files. (You can use the * mask in file names. * - these are any characters.)', 'minify-and-combine'),
-			'default' => 'style.css, themes/*/style.css, style.min.css, themes/*/style.min.css'
-		];
-
-		$options[] = [
-			'type' => 'textarea',
-			'name' => 'css_critical_style',
-			'title' => __('Critical CSS code:', 'minify-and-combine'),
-			'hint' => htmlspecialchars(__('Add critical CSS here. We will insert it into <style> tags in your <head> section of each page.', 'minify-and-combine')),
-			'default' => ''
-		];
-
-		$options[] = [
-			'type' => 'html',
-			'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('Cache Info', 'minify-and-combine') . '</strong><p></p></div>'
-		];
+			'html' => '<div class="wbcr-factory-page-group-header"><strong>' . __('JS & CSS files cache details', 'minify-and-combine') . '</strong><p></p></div>'
+		];*/
 
 		// Произвольный html код
-		$options[] = [
+		/*$options[] = [
 			'type' => 'html',
 			'html' => [$this, 'cacheInfo']
-		];
+		];*/
 
 		$formOptions = [];
 
 		$formOptions[] = [
 			'type' => 'form-group',
-			'items' => $options,
+			'items' => apply_filters('wmac/pages/settings_form_options', $options),
 			//'cssClass' => 'postbox'
 		];
 
-		return apply_filters('wbcr_mac_settings_form_options', $formOptions);
+		/**
+		 * @since 1.1.1 - является устаревшим
+		 */
+		return wbcr_factory_000_apply_filters_deprecated('wbcr_mac_settings_form_options', [$formOptions], '1.1.1', 'wmac/pages/settings_form_options');
 	}
 
 	public function cacheInfo()

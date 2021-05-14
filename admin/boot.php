@@ -48,12 +48,12 @@ add_filter("wbcr_clearfy_group_options", function ($options) {
 	$options[] = array(
 		'name' => 'js_optimize',
 		'title' => __('Optimize JavaScript Code?', 'minify-and-combine'),
-		'tags' => array('optimize_code', 'hide_my_wp')
+		'tags' => array('optimize_performance', 'optimize_code', 'hide_my_wp')
 	);
 	$options[] = array(
 		'name' => 'js_aggregate',
 		'title' => __('Aggregate JS-files?', 'minify-and-combine'),
-		'tags' => array('optimize_code')
+		'tags' => array('optimize_performance', 'optimize_code')
 	);
 	$options[] = array(
 		'name' => 'js_include_inline',
@@ -81,13 +81,13 @@ add_filter("wbcr_clearfy_group_options", function ($options) {
 	$options[] = array(
 		'name' => 'css_optimize',
 		'title' => __('Optimize CSS Code?', 'minify-and-combine'),
-		'tags' => array('optimize_code', 'hide_my_wp')
+		'tags' => array('optimize_performance', 'optimize_code', 'hide_my_wp')
 	);
 
 	$options[] = array(
 		'name' => 'css_aggregate',
 		'title' => __('Aggregate CSS-files?', 'minify-and-combine'),
-		'tags' => array()
+		'tags' => array('optimize_performance')
 	);
 
 	$options[] = array(

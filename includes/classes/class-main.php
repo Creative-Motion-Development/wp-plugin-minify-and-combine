@@ -215,6 +215,11 @@ class WMAC_PluginMain {
 				}
 			}
 
+			// If setting says not to optimize logged in user and user is logged in...
+			if( false === $wmac_noptimize && !WMAC_Plugin::app()->getPopulateOption('optimize_scripts_for_logged') && is_user_logged_in() && current_user_can('edit_posts') ) {
+				$wmac_noptimize = true;
+			}
+
 			// Allows blocking of auto optimization on your own terms regardless of above decisions.
 			$wmac_noptimize = (bool) apply_filters( 'wmac_filter_noptimize', $wmac_noptimize );
 
