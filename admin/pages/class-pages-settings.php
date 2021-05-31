@@ -280,7 +280,8 @@ This can be fully automated for different types of pages with the Мinify And Co
 					'name' => 'css_critical',
 					'title' => __('Critical CSS files:', 'minify-and-combine'),
 					'hint' => __('A comma-separated list of Critical CSS files. (You can use the * mask in file names. * - these are any characters.)', 'minify-and-combine'),
-					'default' => 'style.css, themes/*/style.css, style.min.css, themes/*/style.min.css'
+					'htmlAttrs' => ['placeholder'=>'style.css, themes/*/style.css, style.min.css, themes/*/style.min.css'],
+					'default' => ''
 				],
 
 				[
