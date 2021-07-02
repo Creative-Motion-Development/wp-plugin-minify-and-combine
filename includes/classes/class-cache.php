@@ -385,7 +385,7 @@ class WMAC_PluginCache {
 				}
 			}
 			add_action( 'shutdown', 'wmac_do_cachepurged_action', 11 );
-			add_action( 'wmac_action_cachepurged', [ 'WbcrFactoryClearfy000_Helpers', 'flushPageCache' ], 10, 0 );
+			add_action( 'wmac_action_cachepurged', [ 'WBCR\Factory_Templates_000\Helpers', 'flushPageCache' ], 10, 0 );
 		}
 
 		// Warm cache (part of speedupper)!
