@@ -39,7 +39,7 @@ function wbcr_mac_admin_bar_menu( $wp_admin_bar ) {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
-	$current_url = wp_nonce_url( add_query_arg( [ 'wbcr_mac_clear_cache' => 1 ] ), 'clear_all_cache' );
+	$current_url = esc_url(wp_nonce_url( add_query_arg( [ 'wbcr_mac_clear_cache' => 1 ] ), 'clear_all_cache' ));
 	$percent     = '';
 	if ( ! is_network_admin() ) {
 		$get_used_cache = WMAC_PluginCache::getUsedCache();
@@ -58,7 +58,7 @@ function wbcr_mac_admin_bar_menu( $wp_admin_bar ) {
  * Добавляем кнопку сброса кеша в Clearfy меню
  */
 function wbcr_mac_clearfy_admin_bar_menu( $menu_items ) {
-	$current_url = wp_nonce_url( add_query_arg( [ 'wbcr_mac_clear_cache' => 1 ] ), 'clear_all_cache' );
+	$current_url = esc_url(wp_nonce_url( add_query_arg( [ 'wbcr_mac_clear_cache' => 1 ] ), 'clear_all_cache' ));
 	$percent     = '';
 	if ( ! is_network_admin() ) {
 		$get_used_cache = WMAC_PluginCache::getUsedCache();
