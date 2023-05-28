@@ -195,12 +195,12 @@ class WMAC_MinifyAndCombineSettingsPage extends WBCR\Factory_Templates_000\Pages
 			'hint' => __('To make it more difficult for others to hack your website you can remove the WordPress version number from your site, your css and js. Without that number it\'s not possible to see if you run not the current version to exploit bugs from the older versions. <br><br>
 					Additionally it can improve the loading speed of your site, because without query strings in the URL the css and js files can be cached.', 'clearfy') . '<br><br><b>Clearfy: </b>' . __('Removes the wordpress version number from stylesheets (not logged in user only).', 'clearfy'),
 			'default' => false,
-			'eventsOn' => array(
+			/*'eventsOn' => array(
 				'show' => '.factory-control-disable_remove_style_version_for_auth_users'
 			),
 			'eventsOff' => array(
 				'hide' => '.factory-control-disable_remove_style_version_for_auth_users'
-			)
+			)*/
 		];
 
 		$options[] = [
