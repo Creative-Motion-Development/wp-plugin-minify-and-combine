@@ -96,7 +96,7 @@ define( 'WMAC_PLUGIN_ACTIVE', true );
 define( 'WMAC_PLUGIN_VERSION', $wmac_compatibility->get_plugin_version() );
 define( 'WMAC_PLUGIN_DIR', dirname( __FILE__ ) );
 define( 'WMAC_PLUGIN_BASE', plugin_basename( __FILE__ ) );
-define( 'WMAC_PLUGIN_URL', plugins_url( null, __FILE__ ) );
+define( 'WMAC_PLUGIN_URL', plugins_url( '', __FILE__ ) );
 
 
 #comp remove
